@@ -63,18 +63,13 @@ public class EditService {
 	 */
 	public void update(EditProfile editprofile, Users users) {
 		
-//		editprofile.setName("tanaka");
-//		log.info("プロフィールを変更処理を呼び出しました。: editProfile= {}", editprofile );
-		
 		users.setProfile(editprofile.getProfile());
 		users.setName(editprofile.getName());
 		users.setEmail(editprofile.getEmail());
 		
 		repository.save(users);
+		
 	
-		
-//		log.info("プロフィール変更を保存しています。 : editProfile= {} ", editprofile);
-		
 	}
 
 	
