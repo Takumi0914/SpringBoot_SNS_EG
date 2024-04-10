@@ -42,5 +42,7 @@ public class EntityBase implements Serializable {
 	public void onPreUpdate() {
 		// 更新時をフック。「更新日時」に現在日時をセット。
 		setUpdated(new Date());
+		
+
 	}
 }

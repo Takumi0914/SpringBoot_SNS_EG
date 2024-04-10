@@ -174,29 +174,21 @@
 
                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
                   <h5 class="card-title">自己紹介</h5>
-                  <p class="small fst-italic">
-                    はじめまして、佐藤太郎と申します。私は、大手銀行の投資部門で働いています。投資に対する深い知識と経験を持ち、
-                    顧客に最適な投資プランを提供することができます。
-                    <br>
-                    <br>
-                    また、ビジネスに対する専門知識も持っており、クライアントのビジネス成長をサポートすることもできます。
-                    趣味は旅行とゴルフです。世界中を旅して、新しい文化や人々と出会うことが私の楽しみです。
-                    <br>
-                    <br>
-                    また、週末はゴルフ場で友人とプレーすることもあります。私の信念は、自己研鑽とお客様の満足度の向上に努めることです。
-                    どうぞよろしくお願いいたします。
-                  </p>
-
-                  <h5 class="card-title">プロフィール</h5>
+               
+                  
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">プロフィール</div>
+                    <div class="col-lg-9 col-md-8" th:text='${users.profile}'> </div>
+                  </div>
 
                   <div class="row">
-                    <div class="col-lg-3 col-md-4 label ">名前</div>
-                    <div class="col-lg-9 col-md-8">佐藤太郎</div>
+                    <div class="col-lg-3 col-md-4 label ">ユーザーネーム</div>
+                    <div class="col-lg-9 col-md-8" th:text='${users.name}'> </div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">メールアドレス</div>
-                    <div class="col-lg-9 col-md-8">tsato@dcworks.jp</div>
+                    <div class="col-lg-9 col-md-8" th:text='${users.email}'></div>
                   </div>
 
                 </div>
@@ -211,7 +203,9 @@
                   </div>
 
                   <!-- Profile Edit Form -->
-                  <form>
+                  <form method="post" th:action="@{/profile/edit}" novalidate th:object="${editProfile}"> 
+				　
+
                     <div class="row mb-3">
                       <label for="profileImage" class="col-md-4 col-lg-4 col-form-label">プロフィール画像</label>
                       <div class="col-md-8 col-lg-8">
@@ -226,28 +220,27 @@
                     <div class="row mb-3">
                       <label for="fullName" class="col-md-4 col-lg-4 col-form-label">名前</label>
                       <div class="col-md-8 col-lg-8">
-                        <input name="fullName" type="text" class="form-control" id="fullName" value="佐藤太郎">
+                        <input name="name" type="text" class="form-control" id="fullName">
+						<!-- <input name="fullname" type="text" class="form-control" id="fullName" th:field="*{name}"> -->
+
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="about" class="col-md-4 col-lg-4 col-form-label">自己紹介</label>
                       <div class="col-md-8 col-lg-8">
-                        <textarea name="about" class="form-control" id="about" style="height: 100px">はじめまして、佐藤太郎と申します。私は、大手銀行の投資部門で働いています。投資に対する深い知識と経験を持ち、
-顧客に最適な投資プランを提供することができます。
+                        <textarea name="profile" class="form-control" id="about" style="height: 100px"></textarea>
+                        <!-- <textarea name="about" class="form-control" id="about" style="height: 100px" th:field="*{profile}"></textarea> -->
 
-また、ビジネスに対する専門知識も持っており、クライアントのビジネス成長をサポートすることもできます。
-趣味は旅行とゴルフです。世界中を旅して、新しい文化や人々と出会うことが私の楽しみです。
-
-また、週末はゴルフ場で友人とプレーすることもあります。私の信念は、自己研鑽とお客様の満足度の向上に努めることです。
-どうぞよろしくお願いいたします。</textarea>
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="Email" class="col-md-4 col-lg-4 col-form-label">メールアドレス</label>
                       <div class="col-md-8 col-lg-8">
-                        <input name="email" type="email" class="form-control" id="Email" value="tsato@dcworks.jp">
+                        <input name="email" type="email" class="form-control" id="Email" >
+                      <!--    <input name="email" type="email" class="form-control" id="Email" th:field="*{emailAddress}"> -->
+
                       </div>
                     </div>
 
