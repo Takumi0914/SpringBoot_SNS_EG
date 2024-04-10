@@ -24,5 +24,7 @@ public class EditProfile extends DtoBase {
 	@Size(max = 2000, message = "プロフィールは最大2000文字です。")
 	private String profile;
 	
-	
+	/** ログインID */
+	@Size(max = 32, message = "プロフィールは最大32文字です。")
+	private String loginId;
 }

@@ -66,6 +66,7 @@ public class EditService {
 		users.setProfile(editprofile.getProfile());
 		users.setName(editprofile.getName());
 		users.setEmail(editprofile.getEmail());
+		users.setLoginId(editprofile.getLoginId());
 		
 		repository.save(users);
 		

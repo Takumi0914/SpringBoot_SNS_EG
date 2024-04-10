@@ -190,6 +190,11 @@
                     <div class="col-lg-3 col-md-4 label">メールアドレス</div>
                     <div class="col-lg-9 col-md-8" th:text='${users.email}'></div>
                   </div>
+                  
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">ログインID</div>
+                    <div class="col-lg-9 col-md-8" th:text='${users.loginId}'></div>
+                  </div>
 
                 </div>
 
@@ -239,6 +244,15 @@
                       <label for="Email" class="col-md-4 col-lg-4 col-form-label">メールアドレス</label>
                       <div class="col-md-8 col-lg-8">
                         <input name="email" type="email" class="form-control" id="Email" >
+                      <!--    <input name="email" type="email" class="form-control" id="Email" th:field="*{emailAddress}"> -->
+
+                      </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                      <label for="Email" class="col-md-4 col-lg-4 col-form-label">ログインID</label>
+                      <div class="col-md-8 col-lg-8">
+                        <input name="loginId" type="email" class="form-control" id="login_Id" >
                       <!--    <input name="email" type="email" class="form-control" id="Email" th:field="*{emailAddress}"> -->
 
                       </div>
