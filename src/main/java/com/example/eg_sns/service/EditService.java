@@ -69,6 +69,8 @@ public class EditService {
 		users.setLoginId(editprofile.getLoginId());
 		
 		repository.save(users);
+		
+		//iiiii
 	}
 
 	
