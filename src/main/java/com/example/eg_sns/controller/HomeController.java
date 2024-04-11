@@ -62,14 +62,5 @@ public class HomeController extends AppController {
 		return "redirect:/home";
 		
 		
-		
-		
-		
-		
-		
-		
-				
-		
-		
 	}
 }

@@ -22,34 +22,47 @@
       <div class="row">
         <div class="col-lg-8">
 
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">投稿一覧</h5>
+          <div class="card"　th:each="post : ${postsList}">
 
              
-              <!-- Table with stripped rows -->
-              <div th:if="${@collectionUtil.isEmpty(postList)}" class="alert alert-warning alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle me-1"></i>
-                まだトピックは投稿されていません。
-              </div>
-              <table th:if="${@collectionUtil.isNotEmpty(postsList)}" class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">ユーザーネーム</th>
-                    <th scope="col">タイトル</th>
-                    <th scope="col">本文</th>
-                    
-                  </tr>
-                </thead>
-                <tbody>
-					<tr th:each="post : ${postsList}">
-						<td th:text="${post.users.name}"></td>
-						<td th:text="${post.title}"></td>
-						<td th:text="${post.body}"></td>
+              
+              <div class="card" >
+                <!-- <img src="/assets/img/card.jpg" class="card-img-top" alt="..."> -->
+                <div class="card-body">
+                  <h5 class="card-title"th:text="${post.title}">リラックスしてカフェタイムを楽しむ！テラスでのカフェ体験</h5>
+                  <p class="card-text" th:text="${post.body}">こんにちは、皆さん！今日は素晴らしいテラスでのカフェ体験についてお話ししたいと思います。最近、私は忙しい日常生活から離れるために、テラスでカフェを楽しむことを好んでいます。そこで、今回は私のおすすめのテラスカフェを紹介しつつ、リラックスしてカフェタイムを過ごす方法をご紹介します。
+                    <br>
+                    <br>
+                    私が行ったカフェは、美しい景色が見渡せるテラス席が魅力のカフェでした。テラスでコーヒーや紅茶を飲みながら、日差しを浴びていると、とてもリラックスできます。また、周りの自然の風景を見ながら、ストレスが吹き飛ぶような気分になります。
+                    <br>
+                    <br>
+                    さらに、カフェのメニューも豊富で、美味しい軽食やスイーツもたくさんありました。私は、季節限定のフルーツタルトを注文しました。フルーツの甘みがたっぷりで、サクサクのタルト生地との相性が抜群でした。食べるたびに、幸せな気分になりました。
+                    <br>
+                    <br>
+                    テラスカフェで過ごす時間は、私にとって特別な時間です。自然の中で、おいしい食べ物や飲み物を楽しみながら、リラックスできる場所は貴重です。皆さんも、テラスカフェでのカフェタイムを試してみてはいかがでしょうか？
+                  </p>
+                </div>
 
-					</tr>
-                </tbody>
-              </table>
+                <div class="card-body">
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div>
+                      <i class="bi bi-exclamation-octagon me-1"></i>
+                      <span>エラーメッセージを表示します。</span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                  <form class="row g-3">
+                    <div class="col-md-12">
+                      <input type="text" class="form-control" placeholder="コメントを入力...">
+                    </div>
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary">コメントする</button>
+                    </div>
+                  </form>
+                </div>
+
+                
+              </div>
               <!-- End Table with stripped rows -->
                
 
@@ -57,7 +70,7 @@
 
             	</div>
             </div>
-          </div>
+        
           
             <div class="col-lg-4">
 
