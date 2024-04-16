@@ -20,7 +20,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "comments")
+@Table(name = "post_comments")
 public class Comments extends EntityBase {
 
 	/** ID */
@@ -33,15 +33,15 @@ public class Comments extends EntityBase {
 	@Column(name = "users_id", nullable = false)
 	private Long usersId;
 
-	/** トピックID */
-	@Column(name = "topics_id", nullable = false)
-	private Long topicsId;
+	
+	@Column(name = "posts_id", nullable = false)
+	private Long postsId;
 
-	/** コメント本文 */
-	@Column(name = "body", nullable = false)
-	private String body;
+	
+	@Column(name = "comment", nullable = false)
+	private String comment;
 
-	/** ユーザー情報とのJOIN */
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "users_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private Users users;

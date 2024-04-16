@@ -18,4 +18,9 @@ public class RequestComment extends DtoBase {
 	@NotBlank(message = "コメント本文を入力してください。")
 	@Size(max = 2000, message = "コメント本文は最大2000文字です。")
 	private String comment;
+	
+	private Long postId;
+	
+	private Long usersId;
+
 }

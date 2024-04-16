@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.eg_sns.core.AppNotFoundException;
 import com.example.eg_sns.dto.RequestTopic;
-import com.example.eg_sns.entity.Comments;
 import com.example.eg_sns.entity.Topics;
 import com.example.eg_sns.repository.TopicsRepository;
-import com.example.eg_sns.util.CollectionUtil;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -85,14 +83,14 @@ public class TopicsService {
 			// データが取得できない場合は不正操作の為エラー。（404エラーとする。）
 			throw new AppNotFoundException();
 		}
-
-		// トピックにぶら下がってるコメントを削除。
-		List<Comments> commentsList = topics.getCommentsList();
-		if (CollectionUtil.isNotEmpty(commentsList)) {
-			commentsService.delete(commentsList);
+//
+//		// トピックにぶら下がってるコメントを削除。
+//		List<Comments> commentsList = topics.getCommentsList();
+//		if (CollectionUtil.isNotEmpty(commentsList)) {
+//			commentsService.delete(commentsList);
 		}
 
-		// トピックを削除。
-		repository.delete(topics);
-	}
+//		// トピックを削除。
+//		repository.delete(topics);
+//	}
 }

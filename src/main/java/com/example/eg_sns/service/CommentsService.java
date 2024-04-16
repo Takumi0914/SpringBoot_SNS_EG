@@ -5,17 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.eg_sns.dto.RequestTopicComment;
+import com.example.eg_sns.dto.RequestComment;
 import com.example.eg_sns.entity.Comments;
 import com.example.eg_sns.repository.CommentsRepository;
 
 import lombok.extern.log4j.Log4j2;
 
-/**
- * コメント関連サービスクラス。
- *
- * @author tomo-sato
- */
+
 @Log4j2
 @Service
 public class CommentsService {
@@ -31,12 +27,19 @@ public class CommentsService {
 	 * @param usersId ユーザーID
 	 * @param topicsId トピックID
 	 */
-	public Comments save(RequestTopicComment requestTopicComment, Long usersId, Long topicsId) {
-		Comments topics = new Comments();
-		topics.setUsersId(usersId);
-		topics.setTopicsId(topicsId);
-		topics.setBody(requestTopicComment.getBody());
-		return repository.save(topics);
+	public void save(RequestComment requestComment) {
+		
+		Comments comments= new Comments();
+		comments.setComment(requestComment.getComment());
+		comments.setUsersId(requestComment.getUsersId());
+		comments.setPostsId(requestComment.getPostId());
+		
+		log.info("コメントを保存しました。：requestComment={}", requestComment);
+
+		// 投稿データの登録及び、取得。
+		Comments regComments = repository.save(comments);
+		Long commentsId = regComments.getId();
+		
 	}
 
 	/**
@@ -44,12 +47,12 @@ public class CommentsService {
 	 *
 	 * @param id コメントID
 	 * @param usersId ユーザーID
-	 * @param topicsId トピックID
+	 * @param postsId トピックID
 	 */
-	public void delete(Long id, Long usersId, Long topicsId) {
-		log.info("コメントを削除します。：id={}, usersId={}, topicsId={}", id, usersId, topicsId);
+	public void delete(Long id, Long usersId, Long postsId) {
+		log.info("コメントを削除します。：id={}, usersId={}, commentsId={}", id, usersId, postsId);
 
-		repository.deleteByIdAndUsersIdAndTopicsId(id, usersId, topicsId);
+		repository.deleteByIdAndUsersIdAndPostsId(id, usersId, postsId);
 	}
 
 	/**
@@ -59,5 +62,14 @@ public class CommentsService {
 	 */
 	public void delete(List<Comments> commentsList) {
 		repository.deleteAll(commentsList);
+	}
+	
+	public List<Comments> findAllComentss() {
+		return (List<Comments>) repository.findByOrderByIdDesc();
+		
+	}
+	
+	public List<Comments> findBypostsId(Long postsId) {
+		return (List<Comments>) repository.findByUsersIdOrderByIdDesc(postsId);
 	}
 }
