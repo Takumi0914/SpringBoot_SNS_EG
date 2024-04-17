@@ -1,5 +1,7 @@
 package com.example.eg_sns.repository;
 
+import java.io.Serializable;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -20,7 +22,7 @@ public interface UsersRepository extends PagingAndSortingRepository<Users, Long>
 	 * @param loginId ログインID
 	 * @return ユーザー情報を返す。
 	 */
-	Users findByLoginId(String loginId);
+	Users findByLoginId(Serializable loginId);
 
 	/**
 	 * ユーザー検索を行う。

@@ -1,5 +1,7 @@
 package com.example.eg_sns.service;
 
+import java.io.Serializable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,14 +31,17 @@ public class UsersService {
 	 * @param loginId ログインID
 	 * @return ユーザー情報を返す。
 	 */
-	public Users findUsers(String loginId) {
+	public Users findUsers(Serializable loginId) {
 		log.info("ユーザーを検索します。：loginId={}", loginId);
 
 		Users users = repository.findByLoginId(loginId);
 		log.info("ユーザー検索結果。：loginId={}, users={}", loginId, users);
-
 		return users;
 	}
+	
+//	public Users findUsers(Long userId) {
+//		log.info();
+//	}
 
 	/**
 	 * ユーザー検索を行う。
