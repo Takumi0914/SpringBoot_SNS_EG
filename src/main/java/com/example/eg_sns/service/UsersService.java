@@ -41,6 +41,7 @@ public class UsersService {
 //		log.info();
 //	}
 
+	
 	/**
 	 * ユーザー検索を行う。
 	 * ログインID、パスワードを指定し、ユーザーを検索する。
