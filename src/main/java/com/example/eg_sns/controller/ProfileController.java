@@ -75,10 +75,6 @@ public class ProfileController extends AppController {
 //		model.addAttribute("usersName", usersName);
 		
 		
-		
-		
-		
-		
         log.info("投稿をリフレッシュしました。");
 		
 		
