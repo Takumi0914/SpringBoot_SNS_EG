@@ -40,7 +40,6 @@ public class UsersService {
 //	public Users findUsers(Long userId) {
 //		log.info();
 //	}
-
 	
 	/**
 	 * ユーザー検索を行う。
