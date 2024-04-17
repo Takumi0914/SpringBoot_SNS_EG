@@ -1,5 +1,6 @@
 package com.example.eg_sns.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.example.eg_sns.entity.Users;
 import com.example.eg_sns.service.CommentsService;
 import com.example.eg_sns.service.EditService;
 import com.example.eg_sns.service.PostsService;
+import com.example.eg_sns.service.UsersService;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -42,18 +44,44 @@ public class ProfileController extends AppController {
 	
 	@Autowired
 	private CommentsService commentsService;
+	
+	@Autowired
+	private UsersService usersService;
 
-	@GetMapping(path = {"", "/"})
-	
-	
-	public String index(Model model) {
+	@GetMapping(path = {"", "/","{usersId}"})
+	public String index(Model model,@PathVariable(required = false) Long usersId) {
 		
-		Long id = getUsersId();
+		log.info("リンク先のプロフィールを呼び出しました。 :usersId={}", usersId);
 		
-		List<Posts> postsList = postsService.findByUsersId(id);
+		Long loginId = getUsersId();
+		List<Posts> postsList = new ArrayList<>();
+		
+		if(usersId != null) {
+		postsList = postsService.findByUsersId(usersId);
+		}else {
+		postsList = postsService.findByUsersId(loginId);
+		}
 		model.addAttribute("postsList", postsList);
 		
-log.info("コメントをリフレッシュしました。");
+		
+		
+		
+//		Users users = new Users();
+//		
+//		if(usersId != null) {
+//		users = usersService.findUsers(usersId);
+//		}
+//		
+//		String usersName = users.getName();
+//		
+//		model.addAttribute("usersName", usersName);
+		
+		
+		
+		
+		
+		
+        log.info("投稿をリフレッシュしました。");
 		
 		
 		

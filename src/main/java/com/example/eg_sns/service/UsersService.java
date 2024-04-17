@@ -34,9 +34,12 @@ public class UsersService {
 
 		Users users = repository.findByLoginId(loginId);
 		log.info("ユーザー検索結果。：loginId={}, users={}", loginId, users);
-
 		return users;
 	}
+	
+//	public Users findUsers(Long userId) {
+//		log.info();
+//	}
 
 	/**
 	 * ユーザー検索を行う。
