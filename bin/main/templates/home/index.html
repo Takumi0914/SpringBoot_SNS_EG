@@ -60,40 +60,41 @@
                     </div>
                   </form>
                   
-                  <div class="card-body">
+                  <div class="card-body" >
                   <div class="news">
                     <div class="post-item clearfix" th:each="comments :${post.postCommentsList}">
                       <h4><a th:href="@{/profile/{id}(id=${comments.users.id})}" th:text="${comments.users.name}">前田裕司</a></h4>
                       <p th:text="${comments.comment}">ハヤシライス、ピリ辛味噌バターコーンのスープパスタを食べてきました。...</p>
-                      
+            <th:block th:if="${comments.users.id == users.id}">
+             <div class="card-footer" >
+              <div class="row mb-3">
+                <div class="col-sm-4">
+                  <a th:href="@{/home/comment/delete/{postsId}/{commentsId}(postsId=${post.id}, commentsId=${comments.id})}" class="btn btn-danger">削除する</a>
+                </div>
+              </div>
+            </div>
+           </th:block>
+              
                     </div>
-                  <!-- End sidebar recent posts-->
-                
-                     
-                    
-                      <!--
-                     <p th:text="${commentsList[0].comment}"></p>
-                 
-                     <p th:text="${commentsList}"></p>
-                     <p th:text="${postsList}"></p>
-                   -->
-
                   </div><!-- End sidebar recent posts-->
                 </div>
-
                 
+               
+               
+            
+            
               </div>
               <!-- End Table with stripped rows -->
                
 
          
 
-            	</div>
             </div>
-        
+           </div>
         </div>
-            <div class="col-lg-4">
-
+        
+        
+         <div class="col-lg-4">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">今の気持ちをシェアしよう！</h5>
@@ -131,7 +132,7 @@
             </div>
             
            
-                </div>
+           </div>
           </div>
           
           

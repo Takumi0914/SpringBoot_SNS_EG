@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -95,6 +96,21 @@ log.info("コメントをリフレッシュしました。");
 		return "redirect:/profile";
 		
 		
+	}
+	
+	@GetMapping("/comment/delete/{postsId}/{commentsId}")
+	public String commentDelete(@PathVariable Long postsId, @PathVariable Long commentsId) {
+
+		log.info("コメント削除処理のアクションが呼ばれました。：postsId={}, commentsId={}", postsId, commentsId);
+
+		// ログインユーザー情報取得（※自分が投稿したコメント以外を削除しない為の制御。）
+		Long usersId = getUsersId();
+
+		// コメント削除処理
+		commentsService.delete(commentsId, usersId, postsId);
+
+		// 入力画面へリダイレクト。
+		return "redirect:/profile";
 	}
 
 	

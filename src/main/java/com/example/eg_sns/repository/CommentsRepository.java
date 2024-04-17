@@ -15,7 +15,6 @@ import com.example.eg_sns.entity.Comments;
  * @author tomo-sato
  */
 public interface CommentsRepository extends PagingAndSortingRepository<Comments, Long>, CrudRepository<Comments, Long> {
-
 	
 	List<Comments> findByOrderByIdDesc();
 	/**

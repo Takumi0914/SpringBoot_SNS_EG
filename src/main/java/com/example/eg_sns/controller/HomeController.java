@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.eg_sns.dto.RequestComment;
 import com.example.eg_sns.dto.RequestShare;
-import com.example.eg_sns.entity.Comments;
 import com.example.eg_sns.entity.Posts;
 import com.example.eg_sns.service.CommentsService;
 import com.example.eg_sns.service.PostsService;
@@ -49,9 +48,9 @@ public class HomeController extends AppController {
 		
 		log.info("投稿をリフレッシュしました。");
 		
-		List<Comments> commentsList = commentsService.findAllComentss();
-		log.info("aaa。：commentsList={}", commentsList);
-		model.addAttribute("commentsList", commentsList);
+//		List<Comments> comments = commentsService.findAllComentss();
+//		log.info("aaa。：commentsList={}", comments);
+//		model.addAttribute("commentsList", comments);
 		
 		log.info("コメントをリフレッシュしました。");
 		

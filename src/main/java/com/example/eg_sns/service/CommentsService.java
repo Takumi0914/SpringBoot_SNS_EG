@@ -37,8 +37,8 @@ public class CommentsService {
 		log.info("コメントを保存しました。：requestComment={}", requestComment);
 
 		// 投稿データの登録及び、取得。
-		Comments regComments = repository.save(comments);
-		Long commentsId = regComments.getId();
+	     Comments regComments = repository.save(comments);
+	     Long commentsId = regComments.getId();
 		
 	}
 
@@ -60,7 +60,7 @@ public class CommentsService {
 	 *
 	 * @param commentsList コメントリスト
 	 */
-	public void delete(List<Comments> commentsList) {
+	public void deleteall(List<Comments> commentsList) {
 		repository.deleteAll(commentsList);
 	}
 	
