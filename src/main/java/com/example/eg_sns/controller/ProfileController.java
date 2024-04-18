@@ -75,10 +75,11 @@ public class ProfileController extends AppController {
 		String usersName = users.getName();
 		model.addAttribute("usersName", usersName);
 		
-		
         log.info("投稿をリフレッシュしました。");
 		
-		
+        model.addAttribute("loginId", loginId);
+        model.addAttribute("usersId",usersId);
+        
 		
 		model.addAttribute("requestComment", new RequestComment());
 		log.info("コメントをリフレッシュしました。");
@@ -138,13 +139,13 @@ public class ProfileController extends AppController {
 	
 	
 	//友達申請ボタン押下時アクション
-	@PostMapping("/add")
-	public String post(@Validated @ModelAttribute RequestFriend requestFriend) {
+	@PostMapping("/add/{usersId}")
+	public String post(@Validated @ModelAttribute RequestFriend requestFriend,@PathVariable(required = false) Long usersId) {
 		
 		log.info("友達申請を受け取りました。：requestFriend={}", requestFriend);
 		
 		
-		return "redirect:/profile";
+		return "redirect:/profile/{usersId}";
 		
 		
 	}

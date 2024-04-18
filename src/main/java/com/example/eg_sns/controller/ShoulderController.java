@@ -1,7 +1,9 @@
 package com.example.eg_sns.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -12,10 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/shoulder")
-public class ShoulderController {
+public class ShoulderController  extends AppController{
 
-	@GetMapping(path = {"", "/"})
-	public String indes() {
+	@GetMapping(path = {"", "/", "usersID"})
+	public String index(Model model,@PathVariable(required = false) Long usersId) {
+		
+		Long loginId = getUsersId();
+		
+		model.addAttribute("loginId", loginId);
+        model.addAttribute("usersId",usersId);
+		
 		return "common/shoulder_fragment";
 	}
 }
