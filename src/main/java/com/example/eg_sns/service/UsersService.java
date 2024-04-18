@@ -1,5 +1,7 @@
 package com.example.eg_sns.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,9 +39,13 @@ public class UsersService {
 		return users;
 	}
 	
-//	public Users findUsers(Long userId) {
-//		log.info();
-//	}
+	//ユーザー情報をuserIdで取得
+	public Users findUsers(Long userId) {
+		log.info("ユーザーを検索します。：userId={}", userId);
+		Optional<Users> user = repository.findById(userId);
+		Users users = user.get();
+		return users;
+	}
 	
 	/**
 	 * ユーザー検索を行う。

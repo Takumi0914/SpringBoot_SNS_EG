@@ -95,8 +95,8 @@
               <img src="/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
               <h2 th:text="${usersName}">佐藤太郎</h2>
               <div class="social-links mt-2">
-                <form action="users-profile.jsp" method="post">
-                  <button type="button" class="btn btn-primary rounded-pill">友達申請</button>
+                <form th:action="@{/profile/add}" th:object="${requestFriend}" method="post">
+                  <button type="submit" class="btn btn-primary rounded-pill" name=status value="${1}">友達申請</button>
                 </form>
               </div>
             </div>

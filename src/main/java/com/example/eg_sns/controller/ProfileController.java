@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.eg_sns.dto.EditProfile;
 import com.example.eg_sns.dto.RequestComment;
+import com.example.eg_sns.dto.RequestFriend;
 import com.example.eg_sns.entity.Posts;
 import com.example.eg_sns.entity.Users;
 import com.example.eg_sns.service.CommentsService;
@@ -63,16 +64,16 @@ public class ProfileController extends AppController {
 		
 		
 		
-		
-//		Users users = new Users();
-//		
-//		if(usersId != null) {
-//		users = usersService.findUsers(usersId);
-//		}
-//		
-//		String usersName = users.getName();
-//		
-//		model.addAttribute("usersName", usersName);
+		//ユーザーネームをuserIdから取得しusersNameに格納している
+		//th:で呼び出し可能
+		Users users = new Users();
+		if(usersId != null) {
+		users = usersService.findUsers(usersId);
+		}else {
+		users = usersService.findUsers(loginId);
+		}
+		String usersName = users.getName();
+		model.addAttribute("usersName", usersName);
 		
 		
         log.info("投稿をリフレッシュしました。");
@@ -133,6 +134,19 @@ public class ProfileController extends AppController {
 
 		// 入力画面へリダイレクト。
 		return "redirect:/profile";
+	}
+	
+	
+	//友達申請ボタン押下時アクション
+	@PostMapping("/add")
+	public String post(@Validated @ModelAttribute RequestFriend requestFriend) {
+		
+		log.info("友達申請を受け取りました。：requestFriend={}", requestFriend);
+		
+		
+		return "redirect:/profile";
+		
+		
 	}
 
 	

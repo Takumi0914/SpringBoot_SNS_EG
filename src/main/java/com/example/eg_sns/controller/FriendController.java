@@ -15,4 +15,6 @@ public class FriendController {
 	public String list() {
 		return "friend/list";
 	}
+	
+	
 }
