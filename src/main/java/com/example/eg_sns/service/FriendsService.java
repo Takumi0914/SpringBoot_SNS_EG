@@ -37,6 +37,11 @@ public class FriendsService {
 		return (List<Friends>) repository.findByUsersId(usersId) ;
 		 
 	 }
+	 
+	 public  List<Friends> findAlllFriends(){
+			return (List<Friends>) repository.findAll() ;
+			 
+		 }
 
 
 	/**
