@@ -1,13 +1,13 @@
 package com.example.eg_sns.service;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.eg_sns.dto.RequestAccount;
-import com.example.eg_sns.entity.Users;
-import com.example.eg_sns.repository.UsersRepository;
+import com.example.eg_sns.dto.RequestFriend;
+import com.example.eg_sns.entity.Friends;
+import com.example.eg_sns.repository.FriendsRepository;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -22,7 +22,7 @@ public class FriendsService {
 
 	/** リポジトリインターフェース。 */
 	@Autowired
-	private UsersRepository repository;
+	private FriendsRepository repository;
 
 	/**
 	 * ユーザー検索を行う。
@@ -31,37 +31,26 @@ public class FriendsService {
 	 * @param loginId ログインID
 	 * @return ユーザー情報を返す。
 	 */
-	public Users findUsers(String loginId) {
-		log.info("ユーザーを検索します。：loginId={}", loginId);
 
-		Users users = repository.findByLoginId(loginId);
-		log.info("ユーザー検索結果。：loginId={}, users={}", loginId, users);
-		return users;
-	}
 	
-	//ユーザー情報をuserIdで取得
-	public Users findUsers(Long userId) {
-		log.info("ユーザーを検索します。：userId={}", userId);
-		Optional<Users> user = repository.findById(userId);
-		Users users = user.get();
-		return users;
-	}
-	
+	 public  List<Friends> findUsers(Long usersId){
+		return (List<Friends>) repository.findByUsersId(usersId) ;
+		 
+	 }
+
+
 	/**
-	 * ユーザー検索を行う。
-	 * ログインID、パスワードを指定し、ユーザーを検索する。
+	 * ユーザー登録処理を行う。
 	 *
-	 * @param loginId ログインID
-	 * @param password パスワード
-	 * @return ユーザー情報を返す。
+	 * @param requestAccount ユーザーDTO
 	 */
-	public Users findUsers(String loginId, String password) {
-		log.info("ユーザーを検索します。：loginId={}, password={}", loginId, password);
-
-		Users users = repository.findByLoginIdAndPassword(loginId, password);
-		log.info("ユーザー検索結果。：loginId={}, password={}, users={}", loginId, password, users);
-
-		return users;
+	public void save(RequestFriend requestFriend) {
+		Friends friend = new Friends();
+		friend.setStatus(requestFriend.getStatus());
+		friend.setFriendId(requestFriend.getFriendId());
+		friend.setUsersId(requestFriend.getUsersId());
+		
+		repository.save(friend);
 	}
 
 	/**
@@ -69,21 +58,5 @@ public class FriendsService {
 	 *
 	 * @param requestAccount ユーザーDTO
 	 */
-	public void save(RequestAccount requestAccount) {
-		Users users = new Users();
-		users.setLoginId(requestAccount.getLoginId());
-		users.setPassword(requestAccount.getPassword());
-		users.setName(requestAccount.getName());
-		users.setEmail(requestAccount.getEmail());
-		repository.save(users);
-	}
-
-	/**
-	 * ユーザー登録処理を行う。
-	 *
-	 * @param requestAccount ユーザーDTO
-	 */
-	public void save(Users users) {
-		repository.save(users);
-	}
+	
 }

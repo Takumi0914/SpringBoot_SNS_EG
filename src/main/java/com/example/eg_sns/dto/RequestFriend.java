@@ -13,4 +13,8 @@ import lombok.EqualsAndHashCode;
 public class RequestFriend extends DtoBase {
 
 	private String status;
+	
+	private Long usersId;
+	
+	private Long friendId;
 }

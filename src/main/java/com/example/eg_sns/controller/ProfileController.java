@@ -17,11 +17,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.eg_sns.dto.EditProfile;
 import com.example.eg_sns.dto.RequestComment;
-import com.example.eg_sns.dto.RequestFriend;
 import com.example.eg_sns.entity.Posts;
 import com.example.eg_sns.entity.Users;
 import com.example.eg_sns.service.CommentsService;
 import com.example.eg_sns.service.EditService;
+import com.example.eg_sns.service.FriendsService;
 import com.example.eg_sns.service.PostsService;
 import com.example.eg_sns.service.UsersService;
 
@@ -46,8 +46,11 @@ public class ProfileController extends AppController {
 	
 	@Autowired
 	private UsersService usersService;
+	
+	@Autowired
+	private FriendsService friendsService;
 
-	@GetMapping(path = {"", "/","{usersId}"})
+	@GetMapping(path = {"", "/","/{usersId}"})
 	public String index(Model model,@PathVariable(required = false) Long usersId) {
 		
 		log.info("リンク先のプロフィールを呼び出しました。 :usersId={}", usersId);
@@ -138,17 +141,7 @@ public class ProfileController extends AppController {
 	}
 	
 	
-	//友達申請ボタン押下時アクション
-	@PostMapping("/add/{usersId}")
-	public String post(@Validated @ModelAttribute RequestFriend requestFriend,@PathVariable(required = false) Long usersId) {
-		
-		log.info("友達申請を受け取りました。：requestFriend={}", requestFriend);
-		
-		
-		return "redirect:/profile/{usersId}";
-		
-		
-	}
+	
 
 	
 }

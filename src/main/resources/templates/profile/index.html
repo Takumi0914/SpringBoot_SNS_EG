@@ -96,7 +96,8 @@
               <h2 th:text="${usersName}">佐藤太郎</h2>
               <div class="social-links mt-2">
 			   <th:block th:if="${usersId != loginId && usersId != null}">
-                 <form th:action="@{/profile/add/{usersId}(usersId=${usersId})}" th:object="${requestFriend}" method="post">
+                 <form th:action="@{/friend/add/{friendId}(friendId=${usersId})}" th:object="${requestFriend}" method="post">
+				<input type="hidden" name="friendId" th:value=${usersId}>
                   <button type="submit" class="btn btn-primary rounded-pill" name=status value="1">友達申請</button>
                  </form>
                 </th:block>
