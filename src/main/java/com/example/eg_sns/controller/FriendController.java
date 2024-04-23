@@ -125,6 +125,44 @@ public class FriendController extends AppController {
 			
 			
 		}
+		
+		//友達申請ボタン押下時アクション
+				@PostMapping("/list/add/{friendId}")
+				public String post2(@Validated @ModelAttribute RequestFriend requestFriend,@PathVariable(required = false) Long friendId) {
+					
+					log.info("友達申請を受け取りました。：requestFriend={}", requestFriend);
+					
+					/**
+					 * status 
+					 * friendId
+					 * usersId
+					 */
+					
+					Long loginId = getUsersId();
+
+					
+					RequestFriend friend = new RequestFriend();
+					friend.setStatus(requestFriend.getStatus());
+					friend.setFriendId(requestFriend.getFriendId());
+					friend.setUsersId(loginId);
+					
+					log.info("友達申請を送信しました。：friend={}", friend);
+					friendsService.save(friend);
+					
+					RequestFriend friend2 = new RequestFriend();
+					friend2.setStatus("2");
+					friend2.setFriendId(friend.getUsersId());
+					friend2.setUsersId(friend.getFriendId());
+					
+					log.info("友達申請を受信しました。：friend2={}", friend2);
+					
+					friendsService.save(friend2);
+					
+					
+					return "redirect:/friend/list" ;
+					
+					
+				}
 	
 	
 }
