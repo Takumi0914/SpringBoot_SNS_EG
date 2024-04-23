@@ -54,12 +54,14 @@
 						
 						<div th:case="2">
 							
-							<form th:action="@{/friend/list/add/{friendId}(friendId=${friend.id})}" th:object="${requestFriend}" method="post">
-								<button type="button" class="btn btn-primary rounded-pill">承認</button>
+							<form th:action="@{/friend/regist/{friendId}(friendId=${friend.id})}" th:object="${requestFriend}" method="post">
+								<input type="hidden" name="friendId" th:value=${friend.id}>
+								<button type="submit" class="btn btn-primary rounded-pill">承認</button>
 							</form>
 							
-							</form th:action="@{/friend/list/add/{friendId}(friendId=${friend.id})}" th:object="${requestFriend}" method="post">
-								<button type="button" class="btn btn-danger rounded-pill">却下</button>
+							<form th:action="@{/friend/delete/{friendId}(friendId=${friend.id})}" th:object="${requestFriend}" method="post">
+								<input type="hidden" name="friendId" th:value=${friend.id}>
+								<button type="submit" class="btn btn-danger rounded-pill">却下</button>
 							</form>
 							
 						</div>

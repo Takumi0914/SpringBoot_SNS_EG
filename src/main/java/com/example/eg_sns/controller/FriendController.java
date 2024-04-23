@@ -163,6 +163,77 @@ public class FriendController extends AppController {
 					
 					
 				}
+				
+				@PostMapping("/delete/{friendId}")
+				public String delete(@Validated @ModelAttribute RequestFriend requestFriend,@PathVariable(required = false) Long friendId) {
+
+					log.info("フレンド却下を受け取りました。：friendId={}", friendId);
+
+					// ログインユーザー情報取得（※自分が投稿したコメント以外を削除しない為の制御。）
+					Long usersId = getUsersId();
+					
+					
+					//ユーザー検索（テーブル検索）
+					//Friends friend = friendsService.findFriends(friendId, usersId);
+
+					// コメント削除処理
+//					friendsService.delete();
+					
+					friendsService.delete(friendId, usersId);
+					
+					Long friendId2 = usersId;
+					Long usersId2 = friendId;
+					
+					friendsService.delete(friendId2, usersId2);
+
+					// 入力画面へリダイレクト。
+					return "redirect:/friend/list";
+				}
+				
+				
+				
+				@PostMapping("/regist/{friendId}")
+				public String regist(@Validated @ModelAttribute RequestFriend requestFriend,@PathVariable(required = false) Long friendId) {
+
+					log.info("フレンド追加を受け取りました。： friendId={}", friendId);
+
+					// ログインユーザー情報取得
+					Long usersId = getUsersId();
+					
+					Friends friend = friendsService.findFriends(friendId, usersId);
+
+					
+					//Friends friend =new Friends();
+					
+					// フレンド登録にステータスを変更（３にアップデート）
+					friend.setFriendId(friendId);
+					friend.setUsersId(usersId);
+					friend.setStatus("3");
+					log.info("フレンド追加を送信しました。：friend={} ", friend);
+
+					friendsService.updateStatus(friend);
+					
+					
+					//Idを入れ替えてテーブル両方のテーブルを変更したい
+					Long usersId2 = friendId;
+					Long friendId2 = usersId;
+//					//二段めのテーブルのステータスを変更
+//					Friends friend2 = new Friends();
+//					friend2.setFriendId(friendId2);
+//					friend2.setUsersId(usersId2);
+//					friend2.setStatus("3");
+					
+					Friends friend2 = friendsService.findFriends(friendId2, usersId2);
+					friend2.setFriendId(friendId2);
+					friend2.setUsersId(usersId2);
+					friend2.setStatus("3");
+					log.info("フレンド追加を送信しました。：friend={} ", friend2);
+					
+					friendsService.updateStatus(friend2);
+
+					// 入力画面へリダイレクト。
+					return "redirect:/friend/list";
+				}
 	
 	
 }

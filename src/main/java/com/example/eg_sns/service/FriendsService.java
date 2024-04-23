@@ -42,6 +42,17 @@ public class FriendsService {
 			return (List<Friends>) repository.findAll() ;
 			 
 		 }
+	 
+	 //フレンド検索をします
+	 //update叩きたいフレンドを一件取得
+	 public Friends findFriends(Long friendId, Long usersId) {
+			log.info("フレンドを検索します。：friendId={}, usersId={}", friendId, usersId);
+
+			Friends friend = repository.findByFriendsIdAndUsersId(friendId, usersId);
+			log.info("ユーザー検索結果。：friend={}", friend);
+
+			return friend;
+		}
 
 
 	/**
@@ -57,11 +68,22 @@ public class FriendsService {
 		
 		repository.save(friend);
 	}
+	
+	
+	public void delete(Long friendId, Long usersId) {
+		log.info("フレンドを削除します。: usersId={}, friendId={}", friendId, usersId);
 
-	/**
-	 * ユーザー登録処理を行う。
-	 *
-	 * @param requestAccount ユーザーDTO
-	 */
+		repository.deleteByFriendIdAndUsersId(friendId, usersId);
+	}
+
+	
+	
+	
+	//regist=フレンド追加/承認（statusを３にアップデートする
+	public void updateStatus(Friends friend) {
+		
+		repository.save(friend);
+		
+	}
 	
 }

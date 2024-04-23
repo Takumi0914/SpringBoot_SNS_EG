@@ -87,7 +87,6 @@ public class ProfileController extends AppController {
 		model.addAttribute("requestComment", new RequestComment());
 		log.info("コメントをリフレッシュしました。");
 		
-		
 		return "profile/index";
 	}
 	
