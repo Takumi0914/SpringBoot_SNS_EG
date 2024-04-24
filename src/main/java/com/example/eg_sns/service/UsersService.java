@@ -62,7 +62,7 @@ public class UsersService {
 	 * @param password パスワード
 	 * @return ユーザー情報を返す。
 	 */
-	public Users findUsers(Long loginId, String password) {
+	public Users findUsers(String loginId, String password) {
 		log.info("ユーザーを検索します。：loginId={}, password={}", loginId, password);
 
 		Users users = repository.findByLoginIdAndPassword(loginId, password);

@@ -3,6 +3,7 @@ package com.example.eg_sns.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.eg_sns.dto.EditPassword;
 import com.example.eg_sns.dto.EditProfile;
 import com.example.eg_sns.entity.Users;
 import com.example.eg_sns.repository.UsersRepository;
@@ -55,6 +56,8 @@ public class EditService {
 
 		return users;
 	}
+	
+	
 
 	/**
 	 * ユーザー登録処理を行う。
@@ -72,7 +75,14 @@ public class EditService {
 		
 	}
 
-	
+public void update(EditPassword editPassword, Users users) {
+		
+		users.setPassword(editPassword.getNewpassword());
+		
+		
+		repository.save(users);
+		
+	}
 
 
 

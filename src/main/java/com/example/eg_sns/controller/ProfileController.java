@@ -37,7 +37,7 @@ import lombok.extern.log4j.Log4j2;
 public class ProfileController extends AppController {
 	
 	@Autowired
-	private EditService editservice;
+	private EditService editService;
 	
 	@Autowired
 	private PostsService postsService;
@@ -102,7 +102,7 @@ public class ProfileController extends AppController {
 		
 		log.info("プロフィール変更が完了しました。");
 		
-		editservice.update(editprofile ,users);
+		editService.update(editprofile ,users);
 		
 		return "profile/index";
 	}
@@ -114,11 +114,17 @@ public class ProfileController extends AppController {
 		
 		log.info("プロフィールを変更処理を呼び出しました。: editPassword= {}", editPassword );
 		
-		Users users = getUsers();
+		Users user = getUsers();
+		
+		String loginId = user.getLoginId();
+		
+		String password = user.getPassword();
+		
+		Users users = editService.findUsers(loginId, password);
 		
 		log.info("プロフィール変更が完了しました。");
 		
-		editservice.update(editPassword ,users);
+		editService.update(editPassword ,users);
 		
 		return "profile/index";
 	}
