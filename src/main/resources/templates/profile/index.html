@@ -95,13 +95,16 @@
               <img src="/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
               <h2 th:text="${usersName}">佐藤太郎</h2>
               <div class="social-links mt-2">
-			   <th:block th:if="${usersId != loginId && usersId != null}">
+			     <th:block th:if="${usersId != loginId && usersId != null}">
                  <form th:action="@{/friend/add/{friendId}(friendId=${usersId})}" th:object="${requestFriend}" method="post">
 				<input type="hidden" name="friendId" th:value=${usersId}>
                   <button type="submit" class="btn btn-primary rounded-pill" name=status value="1">友達申請</button>
                  </form>
                 </th:block>
-              </div>
+			   
+			
+
+              </th>
             </div>
           </div>
 
@@ -231,7 +234,7 @@
                   </div>
 
                   <!-- Change Password Form -->
-                  <form>
+                  <form method="post" th:action="@{/profile/password}" novalidate th:object="${editPassword}">
                     <div class="row mb-3">
                       <label for="currentPassword" class="col-md-4 col-lg-4 col-form-label">現在のパスワード</label>
                       <div class="col-md-8 col-lg-8">

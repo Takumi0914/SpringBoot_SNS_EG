@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.eg_sns.dto.EditPassword;
 import com.example.eg_sns.dto.EditProfile;
 import com.example.eg_sns.dto.RequestComment;
 import com.example.eg_sns.entity.Posts;
@@ -102,6 +103,22 @@ public class ProfileController extends AppController {
 		log.info("プロフィール変更が完了しました。");
 		
 		editservice.update(editprofile ,users);
+		
+		return "profile/index";
+	}
+	
+	@PostMapping("/password")
+	public String edit(@Validated @ModelAttribute EditPassword editPassword,
+			BindingResult result,
+			RedirectAttributes redirectAttributes) {
+		
+		log.info("プロフィールを変更処理を呼び出しました。: editPassword= {}", editPassword );
+		
+		Users users = getUsers();
+		
+		log.info("プロフィール変更が完了しました。");
+		
+		editservice.update(editPassword ,users);
 		
 		return "profile/index";
 	}
