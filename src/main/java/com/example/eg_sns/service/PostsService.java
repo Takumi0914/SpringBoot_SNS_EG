@@ -57,6 +57,13 @@ public class PostsService {
 //			postsImagesRepository.save(postImages);
 //		}
 	}
+	
+	
+	public void delete( Long usersId, Long id) {
+		log.info("コメントを削除します。： usersId={}, commentsId={}", usersId, id);
+
+		repository.deleteByUsersIdAndId(usersId, id);
+	}
 
 	/**
 	 * 投稿一覧を取得する。

@@ -42,13 +42,16 @@
                 </div>
 
                 <div class="card-body">
-                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <div>
-                      <i class="bi bi-exclamation-octagon me-1"></i>
-                      <span>エラーメッセージを表示します。</span>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
+					  <th:block th:if="${post.users.id == users.id}">
+             <div class="card-footer" >
+              <div class="row mb-3">
+                <div class="col-sm-4">
+                   <a th:href="@{/profile/post/delete/{id}/{usersId}(id=${post.id}, usersId=${post.users.id})}" class="btn btn-danger">投稿削除</a>
+                </div>
+               </div>
+              </div>
+             </th:block>
+                  
                   <form class="row g-3" method="post" th:action="@{/profile/comment}" th:object="${requestComment}">
                     <div class="col-md-12">
                       <input type="text" class="form-control" placeholder="コメントを入力..." th:field="*{comment}">
@@ -158,13 +161,7 @@
                 </div>
 
                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <div>
-                      <i class="bi bi-exclamation-octagon me-1"></i>
-                      <span>エラーメッセージを表示します。</span>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
+                 
 
                   <!-- Profile Edit Form -->
                   <form method="post" th:action="@{/profile/edit}" novalidate th:object="${editProfile}"> 
@@ -225,13 +222,7 @@
                 </div>
 
                 <div class="tab-pane fade pt-3" id="profile-change-password">
-                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <div>
-                      <i class="bi bi-exclamation-octagon me-1"></i>
-                      <span>エラーメッセージを表示します。</span>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
+                 
 
                   <!-- Change Password Form -->
                   <form method="post" th:action="@{/profile/password}" novalidate th:object="${editPassword}">

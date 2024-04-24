@@ -104,7 +104,7 @@ public class ProfileController extends AppController {
 		
 		editService.update(editprofile ,users);
 		
-		return "profile/index";
+		return  "redirect:/profile";
 	}
 	
 	@PostMapping("/password")
@@ -126,7 +126,7 @@ public class ProfileController extends AppController {
 		
 		editService.update(editPassword ,users);
 		
-		return "profile/index";
+		return "redirect:/profile";
 	}
 	
 	@PostMapping("/comment")
@@ -162,7 +162,18 @@ public class ProfileController extends AppController {
 		return "redirect:/profile";
 	}
 	
-	
+	@GetMapping("/post/delete/{id}/{usersId}")
+	public String  postDelete(@PathVariable Long id , @PathVariable Long usersId) {
+
+		log.info("投稿削除処理のアクションが呼ばれました。：id={} usersId={}", id, usersId);
+
+		// ログインユーザー情報取得（※自分が投稿したコメント以外を削除しない為の制御。）
+		// コメント削除処理
+		postsService.delete(usersId, id);
+
+		// 入力画面へリダイレクト。
+		return "redirect:/profile";
+	}
 	
 
 	
