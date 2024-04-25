@@ -1,5 +1,6 @@
 package com.example.eg_sns.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,12 @@ public class UsersService {
 		Users users = user.get();
 		return users;
 	}
+	
+	public  List<Users> findAllUsers(){
+		return (List<Users>) repository.findAll() ;
+		 
+	 }
+	
 	
 	/**
 	 * ユーザー検索を行う。

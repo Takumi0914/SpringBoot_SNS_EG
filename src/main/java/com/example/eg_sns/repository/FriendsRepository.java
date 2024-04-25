@@ -1,11 +1,11 @@
 package com.example.eg_sns.repository;
 
-import java.util.List;
-
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.example.eg_sns.entity.Friends;
+
+import jakarta.transaction.Transactional;
 
 
 /**
@@ -24,12 +24,27 @@ public interface FriendsRepository extends PagingAndSortingRepository<Friends, L
 	 */
 
 	
-	List<Friends>   findByUsersId(Long usersId );
-
-
-
+	Friends   findByUsersId(Long usersId );
 	
-		
-	
+
+
+
+//	void deleteByUsersIdAndFriendId(Long usersId, Long friendId);
+
+
+
+
+//	List<Friends> findByFriendId(Long friendId);
+
+
+
+
+	Friends findByFriendsIdAndUsersId(Long friendId, Long usersId);
+
+
+
+	@Transactional
+	void deleteByFriendIdAndUsersId(Long friendId, Long usersId);
+
 	
 }

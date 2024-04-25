@@ -32,7 +32,6 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
                     <th scope="col">名前</th>
                     <th scope="col">プロフィール</th>
                     <th scope="col">承認ステータス</th>
@@ -40,21 +39,46 @@
                 </thead>
                 <tbody>
                   
-                  <tr>
-                    <th scope="row"><img src="/assets/img/news-4.jpg" alt="" style="width: 80px;"></th>
-                    <td><a href="/profile/">奥山恵子</a></td>
-                    <td>
+                  <tr th:each="friend : ${usersList3}">
+					  
+                    <td><a th:href="@{/profile/{usersId}(usersId=${friend.id})}" th:text="${friend.name}">奥山恵子</a></td>
+                    <td th:text="${friend.profile}">
                       はじめまして、奥山恵子と申します。フリーランスのイラストレーターです。センスが良く、<br>独自のスタイルを持ったイラストを制作しています。<br>クライアントからの要望に応えるため、柔軟な発想力を発揮しています。<br>趣味は絵を描くことと読書です。
                     </td>
-                    <td><button type="button" class="btn btn-secondary rounded-pill" disabled="disabled">承認済み</button></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"><img src="/assets/img/news-5.jpg" alt="" style="width: 80px;"></th>
-                    <td><a href="/profile/">矢部将也</a></td>
-                    <td>
-                      こんにちは、矢部将也と言います。飲食店の店長をしています。<br>お客様に対して丁寧な接客を心掛け、料理の腕も良いと評判をいただいています。<br>趣味は旅行と料理研究です。お店にもぜひお越しください！
+                    	
+                    <td th:if="${friend.friendsInfo != null}" th:switch="${friend.friendsInfo.status}">
+						
+						<div th:case="1">
+							<button type="button" class="btn btn-secondary rounded-pill" disabled="disabled">申請済み</button>
+						</div>
+						
+						<div th:case="2">
+							
+							<form th:action="@{/friend/regist/{friendId}(friendId=${friend.id})}" th:object="${requestFriend}" method="post">
+								<input type="hidden" name="friendId" th:value=${friend.id}>
+								<button type="submit" class="btn btn-primary rounded-pill">承認</button>
+							</form>
+							
+							<form th:action="@{/friend/delete/{friendId}(friendId=${friend.id})}" th:object="${requestFriend}" method="post">
+								<input type="hidden" name="friendId" th:value=${friend.id}>
+								<button type="submit" class="btn btn-danger rounded-pill">却下</button>
+							</form>
+							
+						</div>
+						
+						<div th:case="3">
+							<button type="button" class="btn btn-secondary rounded-pill" disabled="disabled">フレンド</button>
+						</div>
+						
+					</td>
+					
+					<td th:if="${friend.friendsInfo == null}" >
+                       <form th:action="@{/friend/list/add/{friendId}(friendId=${friend.id})}" th:object="${requestFriend}" method="post">
+							<input type="hidden" name="friendId" th:value=${friend.id}>
+                		 	    <button type="submit" class="btn btn-primary rounded-pill" name=status value="1">友達申請</button>
+                		   </form>
                     </td>
-                    <td><button type="button" class="btn btn-primary rounded-pill">未承認</button>&nbsp;<button type="button" class="btn btn-danger rounded-pill">却下</button></td>
+				
                   </tr>
                   
                 </tbody>
