@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.eg_sns.dto.RequestComment;
 import com.example.eg_sns.dto.RequestShare;
@@ -62,13 +64,16 @@ public class HomeController extends AppController {
 	}
 	
 	@PostMapping("/post")
-	public String post(@Validated @ModelAttribute RequestShare requestShare) {
+	public String post(@Validated @ModelAttribute RequestShare requestShare,
+										  @RequestParam("file") MultipartFile file){
 		
-		log.info("投稿内容を受け取りました。：requestTopic={}", requestShare);
+		log.info("投稿内容を受け取りました。：requestShare={} file={}", requestShare, file);
 		
 		Long usersId = getUsersId();
 		
-		postsService.save(requestShare,usersId,null);
+		
+		//postsService.save(requestShare,usersId,file);
+		postsService.save(requestShare, usersId, file);
 		
 		log.info("投稿内容を保存しました。");
 		

@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.eg_sns.dto.RequestShare;
+import com.example.eg_sns.entity.PostImages;
 import com.example.eg_sns.entity.Posts;
 import com.example.eg_sns.repository.PostImagesRepository;
 import com.example.eg_sns.repository.PostsRepository;
@@ -47,7 +49,7 @@ public class PostsService {
 
 		// 投稿データの登録及び、取得。
 		Posts regPosts = repository.save(posts);
-		Long postsId = regPosts.getId();
+		//Long postsId = regPosts.getId();
 
 //		if (postImagesFileUri != null) {
 //			PostImages postImages = new PostImages();
@@ -82,6 +84,32 @@ public class PostsService {
 	 */
 	public List<Posts> findByUsersId(Long usersId) {
 		return (List<Posts>) repository.findByUsersIdOrderByIdDesc(usersId);
+	}
+
+
+	public void save(RequestShare requestShare, Long usersId, MultipartFile file) {
+		
+		Posts posts = new Posts();
+		posts.setUsersId(usersId);
+		posts.setTitle(requestShare.getTitle());
+		posts.setBody(requestShare.getBody());
+
+		// 投稿データの登録及び、取得。
+		Posts regPosts = repository.save(posts);
+		Long postsId = regPosts.getId();
+		
+		String imageUri = file.getContentType();
+		
+		PostImages postImages = new PostImages();
+		
+		postImages.setPostsId(postsId);	
+		postImages.setUsersId(usersId);
+		postImages.setImageUri(imageUri);	
+		
+		log.info("画像を保存します。： postImages={}", postImages);
+		
+		postsImagesRepository.save(postImages);
+		
 	}
 
 	

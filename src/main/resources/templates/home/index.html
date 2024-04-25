@@ -119,7 +119,7 @@
               </div>
 
               <!-- Vertical Form -->
-              <form class="row g-3" method="post" th:action="@{/home/post}" th:object="${requestShare}">
+              <form class="row g-3" enctype="multipart/form-data" method="post" th:action="@{/home/post}" th:object="${requestShare}">
                 <div class="col-12">
                   <label for="inputNanme4" class="form-label">タイトル</label>
                   <input type="text" name="title" class="form-control" id="inputNanme4">
