@@ -42,13 +42,16 @@
                 </div>
 
                 <div class="card-body">
-                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <div>
-                      <i class="bi bi-exclamation-octagon me-1"></i>
-                      <span>エラーメッセージを表示します。</span>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
+					  <th:block th:if="${post.users.id == users.id}">
+             <div class="card-footer" >
+              <div class="row mb-3">
+                <div class="col-sm-4">
+                   <a th:href="@{/profile/post/delete/{id}/{usersId}(id=${post.id}, usersId=${post.users.id})}" class="btn btn-danger">投稿削除</a>
+                </div>
+               </div>
+              </div>
+             </th:block>
+                  
                   <form class="row g-3" method="post" th:action="@{/profile/comment}" th:object="${requestComment}">
                     <div class="col-md-12">
                       <input type="text" class="form-control" placeholder="コメントを入力..." th:field="*{comment}">
@@ -95,13 +98,16 @@
               <img src="/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
               <h2 th:text="${usersName}">佐藤太郎</h2>
               <div class="social-links mt-2">
-			   <th:block th:if="${usersId != loginId && usersId != null}">
+			     <th:block th:if="${usersId != loginId && usersId != null}">
                  <form th:action="@{/friend/add/{friendId}(friendId=${usersId})}" th:object="${requestFriend}" method="post">
 				<input type="hidden" name="friendId" th:value=${usersId}>
                   <button type="submit" class="btn btn-primary rounded-pill" name=status value="1">友達申請</button>
                  </form>
                 </th:block>
-              </div>
+			   
+			
+
+              </th>
             </div>
           </div>
 
@@ -155,13 +161,7 @@
                 </div>
 
                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <div>
-                      <i class="bi bi-exclamation-octagon me-1"></i>
-                      <span>エラーメッセージを表示します。</span>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
+                 
 
                   <!-- Profile Edit Form -->
                   <form method="post" th:action="@{/profile/edit}" novalidate th:object="${editProfile}"> 
@@ -222,16 +222,10 @@
                 </div>
 
                 <div class="tab-pane fade pt-3" id="profile-change-password">
-                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <div>
-                      <i class="bi bi-exclamation-octagon me-1"></i>
-                      <span>エラーメッセージを表示します。</span>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
+                 
 
                   <!-- Change Password Form -->
-                  <form>
+                  <form method="post" th:action="@{/profile/password}" novalidate th:object="${editPassword}">
                     <div class="row mb-3">
                       <label for="currentPassword" class="col-md-4 col-lg-4 col-form-label">現在のパスワード</label>
                       <div class="col-md-8 col-lg-8">

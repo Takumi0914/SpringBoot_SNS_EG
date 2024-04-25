@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.eg_sns.entity.Posts;
 
@@ -27,4 +28,7 @@ public interface PostsRepository extends PagingAndSortingRepository<Posts, Long>
 	 * @return 投稿一覧を返す。
 	 */
 	List<Posts> findByUsersIdOrderByIdDesc(Long usersId);
+
+	@Transactional
+	void deleteByUsersIdAndId(Long usersId, Long id);
 }

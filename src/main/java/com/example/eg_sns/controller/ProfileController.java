@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.eg_sns.dto.EditPassword;
 import com.example.eg_sns.dto.EditProfile;
 import com.example.eg_sns.dto.RequestComment;
 import com.example.eg_sns.entity.Posts;
@@ -36,7 +37,7 @@ import lombok.extern.log4j.Log4j2;
 public class ProfileController extends AppController {
 	
 	@Autowired
-	private EditService editservice;
+	private EditService editService;
 	
 	@Autowired
 	private PostsService postsService;
@@ -101,9 +102,31 @@ public class ProfileController extends AppController {
 		
 		log.info("プロフィール変更が完了しました。");
 		
-		editservice.update(editprofile ,users);
+		editService.update(editprofile ,users);
 		
-		return "profile/index";
+		return  "redirect:/profile";
+	}
+	
+	@PostMapping("/password")
+	public String edit(@Validated @ModelAttribute EditPassword editPassword,
+			BindingResult result,
+			RedirectAttributes redirectAttributes) {
+		
+		log.info("プロフィールを変更処理を呼び出しました。: editPassword= {}", editPassword );
+		
+		Users user = getUsers();
+		
+		String loginId = user.getLoginId();
+		
+		String password = user.getPassword();
+		
+		Users users = editService.findUsers(loginId, password);
+		
+		log.info("プロフィール変更が完了しました。");
+		
+		editService.update(editPassword ,users);
+		
+		return "redirect:/profile";
 	}
 	
 	@PostMapping("/comment")
@@ -139,7 +162,18 @@ public class ProfileController extends AppController {
 		return "redirect:/profile";
 	}
 	
-	
+	@GetMapping("/post/delete/{id}/{usersId}")
+	public String  postDelete(@PathVariable Long id , @PathVariable Long usersId) {
+
+		log.info("投稿削除処理のアクションが呼ばれました。：id={} usersId={}", id, usersId);
+
+		// ログインユーザー情報取得（※自分が投稿したコメント以外を削除しない為の制御。）
+		// コメント削除処理
+		postsService.delete(usersId, id);
+
+		// 入力画面へリダイレクト。
+		return "redirect:/profile";
+	}
 	
 
 	
