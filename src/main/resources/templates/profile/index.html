@@ -24,6 +24,10 @@
           <div class="card"　th:each="post : ${postsList}">
 			  			                
               <div class="card" >
+				  
+				   <div th:each="postImages:${post.postImagesList}">
+                  <img th:src="${@storageService.getDataUri(postImages.imageUri)}" src="/assets/img/card.jpg" class="card-img-top" alt="..." />
+                  </div>
                 <!-- <img src="/assets/img/card.jpg" class="card-img-top" alt="..."> -->
                 <div class="card-body">
 					<h3 class="card-title" th:text="${post.users.name}">田中広輔</h3>
@@ -79,40 +83,26 @@
                     </div>
                   </div>
                 </div>
-
-                
               </div>
-              <!-- End Table with stripped rows -->
-               
-
-         
-
             	</div>
             </div>
-        
         </div>
-           <div class="col-xl-4">
+        <div class="col-xl-4">
           <div class="card">
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-              <img src="/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-              <h2 th:text="${usersName}">佐藤太郎</h2>
+            	<img th:src="(*{users.iconUri} ? ${@storageService.getDataUri(users.iconUri)} : '/assets/img/profile-img.jpg')"  class="rounded-circle" style="width: 120px;">
+             	<h2 th:text="${usersName}">佐藤太郎</h2>
               <div class="social-links mt-2">
 			     <th:block th:if="${usersId != loginId && usersId != null}">
-                 <form th:action="@{/friend/add/{friendId}(friendId=${usersId})}" th:object="${requestFriend}" method="post">
-				<input type="hidden" name="friendId" th:value=${usersId}>
-                  <button type="submit" class="btn btn-primary rounded-pill" name=status value="1">友達申請</button>
-                 </form>
-                </th:block>
-			   
-			
-
-              </th>
-            </div>
+                		<form th:action="@{/friend/add/{friendId}(friendId=${usersId})}" th:object="${requestFriend}" method="post">
+							<input type="hidden" name="friendId" th:value=${usersId}>
+                	    	<button type="submit" class="btn btn-primary rounded-pill" name=status value="1">友達申請</button>
+            			</form>
+              	  </th:block>
+              	
+          	  </div>
           </div>
-
-
-
 
           <div class="card">
             <div class="card-body pt-3">
@@ -122,22 +112,20 @@
                 <li class="nav-item">
                   <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">基本データ</button>
                 </li>
-
+                
                 <li class="nav-item">
                   <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">プロフィール編集</button>
                 </li>
-
+      
                 <li class="nav-item">
                   <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">パスワード変更</button>
                 </li>
-
               </ul>
               <div class="tab-content pt-2">
 
                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
                   <h5 class="card-title">自己紹介</h5>
                
-                  
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label ">プロフィール</div>
                     <div class="col-lg-9 col-md-8" th:text='${users.profile}'> </div>
@@ -162,19 +150,25 @@
 
                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
                  
-
-                  <!-- Profile Edit Form -->
-                  <form method="post" th:action="@{/profile/edit}" novalidate th:object="${editProfile}"> 
+                  <form method="post" enctype="multipart/form-data" th:action="@{/profile/edit}" novalidate th:object="${editProfile}"> 
 				　
-
                     <div class="row mb-3">
                       <label for="profileImage" class="col-md-4 col-lg-4 col-form-label">プロフィール画像</label>
                       <div class="col-md-8 col-lg-8">
-                        <img src="/assets/img/profile-img.jpg" alt="Profile">
-                        <div class="pt-2">
-                          <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                          <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
-                        </div>
+						<span id="previewbox">
+							<img src="/assets/profileimg/profile-dummy.png" id="previewimg" style="height: 120px;" />
+						</span>
+                    
+                         <div class="pt-2">
+                         			 <label>                      				
+										 <span class="btn btn-primary btn-sm" title="Upload new profile image"> <i class="bi bi-upload btn btn-primary btn-sm"></i></span>
+                           			 	<input type="file" name="file" id="filesend" style="display: none" >
+                          			  </label>
+                          			  
+                          			  <a href="" class="btn btn-danger" title="Remove my profile image" onclick="resetPreview();"><i class="bi bi-trash"></i></a>
+          
+                      	  </div>
+                        
                       </div>
                     </div>
 

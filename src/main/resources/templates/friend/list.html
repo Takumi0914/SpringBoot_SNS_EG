@@ -32,8 +32,9 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th scope="col">名前</th>
-                    <th scope="col">プロフィール</th>
+					<th scope="col" style="width: 40px">#</th>&nbsp;
+                    <th scope="col">名前</th>&nbsp;
+                    <th scope="col">プロフィール</th>&nbsp;
                     <th scope="col">承認ステータス</th>
 
                   </tr>
@@ -41,8 +42,8 @@
                 <tbody>
                   
                   <tr th:each="friend : ${usersList3}">
-					  
-                    <td><a th:href="@{/profile/{usersId}(usersId=${friend.id})}" th:text="${friend.name}">奥山恵子</a></td>
+					 <td> <img th:src="(*{friend.iconUri} ? ${@storageService.getDataUri(friend.iconUri)} : '/assets/img/profile-img.jpg')" style="width: 120px;"></th>
+                     <td><a th:href="@{/profile/{usersId}(usersId=${friend.id})}" th:text="${friend.name}">奥山恵子</a></td>
                     <td th:text="${friend.profile}">
                       はじめまして、奥山恵子と申します。フリーランスのイラストレーターです。センスが良く、<br>独自のスタイルを持ったイラストを制作しています。<br>クライアントからの要望に応えるため、柔軟な発想力を発揮しています。<br>趣味は絵を描くことと読書です。
                     </td>

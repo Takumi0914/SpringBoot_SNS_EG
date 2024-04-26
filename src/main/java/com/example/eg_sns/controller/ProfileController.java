@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.eg_sns.dto.EditPassword;
@@ -24,6 +26,7 @@ import com.example.eg_sns.service.CommentsService;
 import com.example.eg_sns.service.EditService;
 import com.example.eg_sns.service.FriendsService;
 import com.example.eg_sns.service.PostsService;
+import com.example.eg_sns.service.StorageService;
 import com.example.eg_sns.service.UsersService;
 
 import lombok.extern.log4j.Log4j2;
@@ -50,6 +53,9 @@ public class ProfileController extends AppController {
 	
 	@Autowired
 	private FriendsService friendsService;
+	
+	@Autowired
+	private StorageService storageService;
 
 	@GetMapping(path = {"", "/","/{usersId}"})
 	public String index(Model model,@PathVariable(required = false) Long usersId) {
@@ -67,46 +73,28 @@ public class ProfileController extends AppController {
 		model.addAttribute("postsList", postsList);
 		
 		
-		
-		//ユーザーネームをuserIdから取得しusersNameに格納している
-		//th:で呼び出し可能
 		Users users = new Users();
 		if(usersId != null) {
 		users = usersService.findUsers(usersId);
 		}else {
 		users = usersService.findUsers(loginId);
 		}
+		
+	    model.addAttribute("loginId", loginId);
+        model.addAttribute("usersId",usersId);
+		
 		String usersName = users.getName();
 		model.addAttribute("usersName", usersName);
 		
         log.info("投稿をリフレッシュしました。");
 		
-        model.addAttribute("loginId", loginId);
-        model.addAttribute("usersId",usersId);
-        
-		
 		model.addAttribute("requestComment", new RequestComment());
+		
 		log.info("コメントをリフレッシュしました。");
 		
 		return "profile/index";
 	}
-	
-	@PostMapping("/edit")
-	public String edit(@Validated @ModelAttribute EditProfile editprofile,
-			BindingResult result,
-			RedirectAttributes redirectAttributes) {
-		
-		log.info("プロフィールを変更処理を呼び出しました。: editProfile= {}", editprofile );
-		
-		Users users = getUsers();
-		
-		log.info("プロフィール変更が完了しました。");
-		
-		editService.update(editprofile ,users);
-		
-		return  "redirect:/profile";
-	}
-	
+
 	@PostMapping("/password")
 	public String edit(@Validated @ModelAttribute EditPassword editPassword,
 			BindingResult result,
@@ -131,13 +119,11 @@ public class ProfileController extends AppController {
 	
 	@PostMapping("/comment")
 	public String comment(@Validated @ModelAttribute RequestComment requestComment) {
-			//,@ModelAttribute("postId") Long postId) {
 		
 		log.info("コメントを受け取りました。：requestComment={}", requestComment);
 		
 		requestComment.setUsersId(getUsersId());
-		//Long usersId = getUsersId();
-				
+
 		commentsService.save(requestComment);
 		
 		log.info("コメントを保存しました。");
@@ -152,13 +138,10 @@ public class ProfileController extends AppController {
 
 		log.info("コメント削除処理のアクションが呼ばれました。：postsId={}, commentsId={}", postsId, commentsId);
 
-		// ログインユーザー情報取得（※自分が投稿したコメント以外を削除しない為の制御。）
 		Long usersId = getUsersId();
 
-		// コメント削除処理
 		commentsService.delete(commentsId, usersId, postsId);
 
-		// 入力画面へリダイレクト。
 		return "redirect:/profile";
 	}
 	
@@ -166,14 +149,34 @@ public class ProfileController extends AppController {
 	public String  postDelete(@PathVariable Long id , @PathVariable Long usersId) {
 
 		log.info("投稿削除処理のアクションが呼ばれました。：id={} usersId={}", id, usersId);
-
-		// ログインユーザー情報取得（※自分が投稿したコメント以外を削除しない為の制御。）
-		// コメント削除処理
+		
 		postsService.delete(usersId, id);
 
-		// 入力画面へリダイレクト。
 		return "redirect:/profile";
 	}
+	
+	@PostMapping("/edit")
+	public String edit(@Validated @ModelAttribute EditProfile editprofile,
+			BindingResult result,
+			RedirectAttributes redirectAttributes,
+			@RequestParam("file") MultipartFile file) {
+		
+		log.info("プロフィールを変更処理を呼び出しました。: editProfile= {}", editprofile );
+		
+		String imgUri = storageService.store(file);
+		
+		Users users = getUsers();
+		
+		log.info("プロフィール変更が完了しました。");
+		
+		editService.update(editprofile, users, imgUri);
+		
+		return  "redirect:/profile";
+	}
+	
+
+	
+	
 	
 
 	

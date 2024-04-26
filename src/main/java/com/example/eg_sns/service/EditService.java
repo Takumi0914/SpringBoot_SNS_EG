@@ -39,15 +39,6 @@ public class EditService {
 		return users;
 	}
 
-	/**
-	 * ユーザー検索を行う。
-	 * ログインID、パスワードを指定し、ユーザーを検索する。
-	 *
-	 * @param loginId ログインID
-	 * @param password パスワード
-	 * @return ユーザー情報を返す。
-	 */
-	
 	public Users findUsers(String loginId, String password) {
 		log.info("ユーザーを検索します。：loginId={}, password={}", loginId, password);
 
@@ -57,13 +48,6 @@ public class EditService {
 		return users;
 	}
 	
-	
-
-	/**
-	 * ユーザー登録処理を行う。
-	 *
-	 * @param requestAccount ユーザーDTO
-	 */
 	public void update(EditProfile editprofile, Users users) {
 		
 		users.setProfile(editprofile.getProfile());
@@ -75,22 +59,24 @@ public class EditService {
 		
 	}
 
-public void update(EditPassword editPassword, Users users) {
+	public void update(EditPassword editPassword, Users users) {
 		
 		users.setPassword(editPassword.getNewpassword());
-		
 		
 		repository.save(users);
 		
 	}
 
+	public void update(EditProfile editProfile,Users user, String file) {
+		
+		user.setLoginId(editProfile.getLoginId());
+		user.setName(editProfile.getName());
+		user.setEmail(editProfile.getEmail());
+		user.setProfile(editProfile.getProfile());
+		user.setIconUri(file);
+		
+		repository.save(user);
+		
+	}
 
-
-
-	/**
-	 * ユーザー登録処理を行う。
-	 *
-	 * @param requestAccount ユーザーDTO
-	 */
-	
 }
