@@ -24,7 +24,7 @@
 
           <div class="card"　th:each="post : ${postsList}">
 			  
-              <div class="card" >
+             
 				  <div th:each="postImages:${post.postImagesList}">
                   <img th:src="${@storageService.getDataUri(postImages.imageUri)}" src="/assets/img/card.jpg" class="card-img-top" alt="..." />
                   </div>
@@ -32,7 +32,7 @@
                 <!-- <img src="/assets/img/card.jpg" class="card-img-top" alt="..."> -->
                 <div class="card-body">
 					<h3 class="card-title" th:text="${post.users.name}">田中広輔</h3>
-                  <h5 class="card-title"th:text="${post.title}">リラックスしてカフェタイムを楽しむ！テラスでのカフェ体験</h5>
+                  <h5 th:id="|comment_${post.id}|" class="card-title"th:text="${post.title}">リラックスしてカフェタイムを楽しむ！テラスでのカフェ体験</h5>
                   <p class="card-text" th:text="${post.body}">こんにちは、皆さん！今日は素晴らしいテラスでのカフェ体験についてお話ししたいと思います。最近、私は忙しい日常生活から離れるために、テラスでカフェを楽しむことを好んでいます。そこで、今回は私のおすすめのテラスカフェを紹介しつつ、リラックスしてカフェタイムを過ごす方法をご紹介します。
                     <br>
                     <br>
@@ -56,7 +56,19 @@
                </div>
               </div>
              </th:block>
+             
+           <div role="alert" class="alert alert-danger alert-dismissible fade show" th:if="${commentsValidationError != null && commentsValidationError.containsKey(post.id)}">
+						  <div  th:each="error :  ${commentsValidationError.get(post.id).getAllErrors()}">
+                   	  			<i class="bi bi-exclamation-octagon me-1"></i>
+                    	  		<span th:text="${error.getDefaultMessage()}">エラーメッセージを表示します。</span>
+                    	  	</div>
+                    	  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                   		</div>
+                  
                  
+               
+         
+            
                   <form class="row g-3" method="post" th:action="@{/home/comment}" th:object="${requestComment}">
                     <div class="col-md-12">
                       <input type="text" class="form-control" placeholder="コメントを入力..." th:field="*{comment}">
@@ -88,7 +100,7 @@
                 
               </div>
 
-            </div>
+           
             
            </div>
         </div>
@@ -98,14 +110,14 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">今の気持ちをシェアしよう！</h5>
-
-              <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <div>
-                  <i class="bi bi-exclamation-octagon me-1"></i>
-                  <span>エラーメッセージを表示します。</span>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
+              
+               <div role="alert" class="alert alert-danger alert-dismissible fade show" th:if="${validationError != null}">
+						  <div  th:each="error :  ${validationError}">
+                   	  			<i class="bi bi-exclamation-octagon me-1"></i>
+                    	  		<span th:text="${error}">エラーメッセージを表示します。</span>
+                    	  	</div>
+                    	  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                   		</div>
 
               <!-- Vertical Form -->
               <form class="row g-3" enctype="multipart/form-data" method="post" th:action="@{/home/post}" th:object="${requestShare}">

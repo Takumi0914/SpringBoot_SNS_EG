@@ -1,12 +1,15 @@
 package com.example.eg_sns.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -106,21 +109,66 @@ public class ProfileController extends AppController {
 		
 		String loginId = user.getLoginId();
 		
-		String password = user.getPassword();
+		String userPassword = user.getPassword();
 		
-		Users users = editService.findUsers(loginId, password);
+		List<String> errorList = new ArrayList<String>();
 		
-		log.info("プロフィール変更が完了しました。");
+		// 現在のパスワードチェック。
+				if (!userPassword.equals(editPassword.getPassword())) {
+					log.warn("現在のパスワードが違います。：editPassword.getPassword()={}", editPassword.getPassword());
+					
+					
+					errorList.add("現在のパスワードが違います。");
+					redirectAttributes.addFlashAttribute("passwordValidationError", errorList);
+					
+					return "redirect:/profile";
+					
+				}else if (result.hasErrors()) {
+					
+					for(ObjectError error : result.getAllErrors()) {
+						errorList.add(error.getDefaultMessage());
+					}
+					redirectAttributes.addFlashAttribute("passwordValidationError", errorList);
+					
+					log.info("エラーメッセージを受け取りました。：passwordValidationError={} ", errorList);
+					
+					return "redirect:/profile";
+				}
+		
+		Users users = editService.findUsers(loginId, userPassword);
 		
 		editService.update(editPassword ,users);
 		
+		log.info("パスワードを保存しました。: editPassword= {}", editPassword.getPassword() );
+		 
+		 
+		
 		return "redirect:/profile";
+		
 	}
 	
+	//プロフィールページでのコメントボタン押下処理
 	@PostMapping("/comment")
-	public String comment(@Validated @ModelAttribute RequestComment requestComment) {
+	public String comment(@Validated @ModelAttribute RequestComment requestComment,BindingResult result,
+			RedirectAttributes redirectAttributes) {
 		
 		log.info("コメントを受け取りました。：requestComment={}", requestComment);
+		
+		  Long postsId = requestComment.getPostId();
+
+		
+		// バリデーション。
+		if(result.hasErrors()) {
+			Map<Long, BindingResult> errorMap = new HashMap<Long, BindingResult>();
+			errorMap.put(postsId, result);
+			
+			
+			redirectAttributes.addFlashAttribute("commentsValidationError", errorMap);
+			
+			log.info("エラーメッセージを受け取りました。：commentsValidationError={} ", errorMap);
+			
+			return "redirect:/profile/"+ "#comment_" + postsId;
+		}
 		
 		requestComment.setUsersId(getUsersId());
 
@@ -133,6 +181,7 @@ public class ProfileController extends AppController {
 		
 	}
 	
+	//プロフィールページでのコメント削除ボタン押下処理
 	@GetMapping("/comment/delete/{postsId}/{commentsId}")
 	public String commentDelete(@PathVariable Long postsId, @PathVariable Long commentsId) {
 
@@ -145,6 +194,7 @@ public class ProfileController extends AppController {
 		return "redirect:/profile";
 	}
 	
+	//プロフィールページでの投稿削除ボラン押下処理
 	@GetMapping("/post/delete/{id}/{usersId}")
 	public String  postDelete(@PathVariable Long id , @PathVariable Long usersId) {
 
@@ -155,14 +205,29 @@ public class ProfileController extends AppController {
 		return "redirect:/profile";
 	}
 	
+	//プロフィール編集内容保存処理
 	@PostMapping("/edit")
 	public String edit(@Validated @ModelAttribute EditProfile editprofile,
 			BindingResult result,
 			RedirectAttributes redirectAttributes,
+			Model model,
 			@RequestParam("file") MultipartFile file) {
 		
 		log.info("プロフィールを変更処理を呼び出しました。: editProfile= {}", editprofile );
 		
+		// バリデーション。
+		if(result.hasErrors()) {
+			List<String> errorList = new ArrayList<String>();
+			for(ObjectError error : result.getAllErrors()) {
+				errorList.add(error.getDefaultMessage());
+			}
+			redirectAttributes.addFlashAttribute("validationError", errorList);
+			
+			log.info("エラーメッセージを受け取りました。：ValidationError={} ", errorList);
+			
+			return "redirect:/profile";
+		}
+			
 		String imgUri = storageService.store(file);
 		
 		Users users = getUsers();
@@ -172,12 +237,8 @@ public class ProfileController extends AppController {
 		editService.update(editprofile, users, imgUri);
 		
 		return  "redirect:/profile";
+	        
 	}
 	
-
-	
-	
-	
-
 	
 }
