@@ -64,7 +64,7 @@
                     	  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                    		</div>
                   
-                  <form class="row g-3" method="post" th:action="@{/profile/comment}" th:object="${requestComment}">
+                  <form class="row g-3" method="post" th:action="@{/profile/comment/{usersId}(usersId=${usersId})}" th:object="${requestComment}">
                     <div class="col-md-12">
                       <input type="text" class="form-control" placeholder="コメントを入力..." th:field="*{comment}">
                       <input type="hidden" name="postId" th:value="${post.id}">
@@ -99,29 +99,29 @@
           <div class="card">
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-            	<img th:src="(*{users.iconUri} ? ${@storageService.getDataUri(users.iconUri)} : '/assets/profileimg/profile-dummy.png')"  class="rounded-circle" style="width: 120px;">
+            	<img th:src="(*{profUser.iconUri} ? ${@storageService.getDataUri(profUser.iconUri)} : '/assets/profileimg/profile-dummy.png')"  class="rounded-circle" style="width: 120px;">
              	<h2 th:text="${usersName}">佐藤太郎</h2>
               <div class="social-links mt-2">
 			     <th:block th:if="${usersId != loginId && usersId != null}">
                 	<td th:if="${friendUsers.friendsInfo != null}" th:switch="${friendUsers.friendsInfo.status}">
 						
-						<div th:case="2">
+						<div th:case="1">
 							<button type="button" class="btn btn-secondary rounded-pill" disabled="disabled">申請済み</button>
-							<form th:action="@{/profile/delete/{friendId}(friendId=${friendUsers.friendsInfo.usersId})}" th:object="${requestFriend}" method="post">
-								<input type="hidden" name="friendId" th:value=${friendUsers.friendsInfo.usersId}>
+							<form th:action="@{/profile/delete/{friendId}(friendId=${usersId})}" th:object="${requestFriend}" method="post">
+								<input type="hidden" name="friendId" th:value=${usersId}>
 								<button type="submit" class="btn btn-danger rounded-pill">申請取消</button>
 							</form>
 						</div>
 						
-						<div th:case="1">
+						<div th:case="2">
 							
-							<form th:action="@{/profile/regist/{friendId}(friendId=${friendUsers.friendsInfo.usersId})}" th:object="${requestFriend}" method="post">
-								<input type="hidden" name="friendId" th:value=${friendUsers.friendsInfo.usersId}>
+							<form th:action="@{/profile/regist/{friendId}(friendId=${usersId})}" th:object="${requestFriend}" method="post">
+								<input type="hidden" name="friendId" th:value=${usersId}>
 								<button type="submit" class="btn btn-primary rounded-pill">承認</button>
 							</form>
 							
-							<form th:action="@{/profile/delete/{friendId}(friendId=${friendUsers.friendsInfo.usersId})}" th:object="${requestFriend}" method="post">
-								<input type="hidden" name="friendId" th:value=${friendUsers.friendsInfo.usersId}>
+							<form th:action="@{/profile/delete/{friendId}(friendId=${usersId})}" th:object="${requestFriend}" method="post">
+								<input type="hidden" name="friendId" th:value=${usersId}>
 								<button type="submit" class="btn btn-danger rounded-pill">却下</button>
 							</form>
 							
@@ -129,8 +129,8 @@
 						
 						<div th:case="3">
 							<button type="button" class="btn btn-secondary rounded-pill" disabled="disabled">フレンド</button>
-							<form th:action="@{/profile/delete/{friendId}(friendId=${friendUsers.friendsInfo.usersId})}" th:object="${requestFriend}" method="post">
-								<input type="hidden" name="friendId" th:value=${friendUsers.friendsInfo.usersId}>
+							<form th:action="@{/profile/delete/{friendId}(friendId=${usersId})}" th:object="${requestFriend}" method="post">
+								<input type="hidden" name="friendId" th:value=${usersId}>
 								<button type="submit" class="btn btn-danger rounded-pill">フレンド削除</button>
 							</form>
 						</div>
@@ -165,18 +165,18 @@
                   <button th:classappend="${validationError == null && passwordValidationError == null} ? 'active' : ''" class="nav-link " data-bs-toggle="tab" data-bs-target="#profile-overview">基本データ</button>
                 </li>
                 
-                
+                <th:block  th:if="${loginId == profUser.id || loginId == null}">
                 
                 <li class="nav-item">
                   <button th:classappend="${validationError == null } ? '' : 'active'" class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" >プロフィール編集</button>
                 </li>
                 
-                
-                
-      
                 <li class="nav-item">
                   <button th:classappend="${passwordValidationError == null} ? '' : 'active'" class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">パスワード変更</button>
                 </li>
+               
+               </th:block>
+                
               </ul>
               
               
@@ -187,26 +187,28 @@
                   
                    <div class="row">
                     <div class="col-lg-3 col-md-4 label ">ユーザーネーム</div>
-                    <div class="col-lg-9 col-md-8" th:text='${users.name}'> </div>
+                    <div class="col-lg-9 col-md-8" th:text='${profUser.name}'> </div>
                   </div>
                
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label ">プロフィール</div>
-                    <div class="col-lg-9 col-md-8" th:text='${users.profile}'> </div>
+                    <div class="col-lg-9 col-md-8" th:text='${profUser.profile}'> </div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">メールアドレス</div>
-                    <div class="col-lg-9 col-md-8" th:text='${users.email}'></div>
+                    <div class="col-lg-9 col-md-8" th:text='${profUser.email}'></div>
                   </div>
                   
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">ログインID</div>
-                    <div class="col-lg-9 col-md-8" th:text='${users.loginId}'></div>
+                    <div class="col-lg-9 col-md-8" th:text='${profUser.loginId}'></div>
                   </div>
 
                </div>
 				
+				
+                <th:block  th:if="${loginId == profUser.id || loginId == null}">
 
 
                 <div th:classappend="${validationError == null } ? '' : 'active show'" class="tab-pane fade profile-edit pt-3" id="profile-edit" name="profile-edit">
@@ -283,7 +285,7 @@
                   </form><!-- End Profile Edit Form -->
 
                 </div>
-
+                
                 <div th:classappend="${passwordValidationError == null} ? '' : 'active show'" class="tab-pane fade pt-3" id="profile-change-password">
 					
 					 <div role="alert" class="alert alert-danger alert-dismissible fade show" th:if="${passwordValidationError != null}">
@@ -325,6 +327,8 @@
                   </form><!-- End Change Password Form -->
 
                 </div>
+                
+				</th:block>
                 
                 </div>
 

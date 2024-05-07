@@ -80,18 +80,19 @@ public class ProfileController extends AppController {
 		
 		//usersにはログインユーザーならログインユーザーの情報を、
 		//他ユーザーならその情報を取得している
-		Users users = new Users();
+		Users profUser = new Users();
 		if(usersId != null) {
-		users = usersService.findUsers(usersId);
+			profUser = usersService.findUsers(usersId);
 		}else {
-		users = usersService.findUsers(loginId);
+			profUser = usersService.findUsers(loginId);
 		}
 		
 	    model.addAttribute("loginId", loginId);
         model.addAttribute("usersId",usersId);
        
-		String usersName = users.getName();
+		String usersName = profUser.getName();
 		model.addAttribute("usersName", usersName);
+		model.addAttribute("profUser", profUser);
 		
         log.info("投稿をリフレッシュしました。");
 		
@@ -100,25 +101,36 @@ public class ProfileController extends AppController {
 		log.info("コメントをリフレッシュしました。");
 		
 		
+		//友達申請ボタンの出し分け処理用
 		Users friendUsers = new Users();
 		Friends friendInfo = new Friends();
-		//他ユーザーを表示しているとき、他ユーザーの
+		//他ユーザーを表示しているとき、他ユーザーの情報をセット
 		if(usersId != null) {
+			//ログインユーザーの情報
 			friendUsers = usersService.findUsers(loginId);
-			friendInfo = friendsService.findFriends(loginId, usersId);
+			//ログインユーザーと表示ユーザーのフレンドテーブル
+			friendInfo = friendsService.findFriends(usersId, loginId);
 		}
-	//	if(friendInfo != null) {
+		
 			friendUsers.setFriendsInfo(friendInfo);
-//		//}else {
-//			friendInfo = 
-//		}
+
 		  log.info("フレンド情報をセットしました。:friendUsers={}, friendInfo={}", friendUsers, friendInfo);
 		  
 		  model.addAttribute("friendUsers", friendUsers);
-		
+		  
+		  
+		  //編集画面の出し分け処理用
+		  
+		  
+		  
+		  
+		  
+		  
 
 		return "profile/index";
 	}
+	
+	
 
 	@PostMapping("/password")
 	public String edit(@Validated @ModelAttribute EditPassword editPassword,
@@ -170,8 +182,9 @@ public class ProfileController extends AppController {
 	}
 	
 	//プロフィールページでのコメントボタン押下処理
-	@PostMapping("/comment")
-	public String comment(@Validated @ModelAttribute RequestComment requestComment,BindingResult result,
+	@PostMapping("/comment/{usersId}")
+	public String comment(@PathVariable Long usersId, @Validated @ModelAttribute RequestComment requestComment,
+			BindingResult result,
 			RedirectAttributes redirectAttributes) {
 		
 		log.info("コメントを受け取りました。：requestComment={}", requestComment);
@@ -189,7 +202,7 @@ public class ProfileController extends AppController {
 			
 			log.info("エラーメッセージを受け取りました。：commentsValidationError={} ", errorMap);
 			
-			return "redirect:/profile/"+ "#comment_" + postsId;
+			return "redirect:/profile/" + Long.toString(usersId) + "#comment_" + postsId;
 		}
 		
 		requestComment.setUsersId(getUsersId());
@@ -198,7 +211,7 @@ public class ProfileController extends AppController {
 		
 		log.info("コメントを保存しました。");
 		
-		return "redirect:/profile";
+		return "redirect:/profile/" + Long.toString(usersId);
 		
 		
 	}
