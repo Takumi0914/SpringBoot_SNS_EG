@@ -202,9 +202,6 @@ public class FriendController extends AppController {
 					
 					Friends friend = friendsService.findFriends(friendId, usersId);
 
-					
-					//Friends friend =new Friends();
-					
 					// フレンド登録にステータスを変更（３にアップデート）
 					friend.setFriendId(friendId);
 					friend.setUsersId(usersId);
@@ -217,11 +214,7 @@ public class FriendController extends AppController {
 					//Idを入れ替えてテーブル両方のテーブルを変更したい
 					Long usersId2 = friendId;
 					Long friendId2 = usersId;
-//					//二段めのテーブルのステータスを変更
-//					Friends friend2 = new Friends();
-//					friend2.setFriendId(friendId2);
-//					friend2.setUsersId(usersId2);
-//					friend2.setStatus("3");
+
 					
 					Friends friend2 = friendsService.findFriends(friendId2, usersId2);
 					friend2.setFriendId(friendId2);
