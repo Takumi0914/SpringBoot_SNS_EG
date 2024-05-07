@@ -64,7 +64,7 @@
                     	  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                    		</div>
                   
-                  <form class="row g-3" method="post" th:action="@{/profile/comment/{usersId}(usersId=${users.id})}" th:object="${requestComment}">
+                  <form class="row g-3" method="post" th:action="@{/profile/comment/{usersId}(usersId=${profUser.id})}" th:object="${requestComment}">
                     <div class="col-md-12">
                       <input type="text" class="form-control" placeholder="コメントを入力..." th:field="*{comment}">
                       <input type="hidden" name="postId" th:value="${post.id}">
