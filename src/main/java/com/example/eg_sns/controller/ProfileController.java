@@ -207,16 +207,16 @@ public class ProfileController extends AppController {
 	}
 	
 	//プロフィールページでのコメント削除ボタン押下処理
-	@GetMapping("/comment/delete/{postsId}/{commentsId}")
-	public String commentDelete(@PathVariable Long postsId, @PathVariable Long commentsId) {
+	@GetMapping("/comment/delete/{postsId}/{commentsId}/{usersId}")
+	public String commentDelete(@PathVariable Long postsId, @PathVariable Long commentsId,@PathVariable Long usersId) {
 
 		log.info("コメント削除処理のアクションが呼ばれました。：postsId={}, commentsId={}", postsId, commentsId);
 
-		Long usersId = getUsersId();
+		Long userId = getUsersId();
 
-		commentsService.delete(commentsId, usersId, postsId);
+		commentsService.delete(commentsId, userId, postsId);
 
-		return "redirect:/profile";
+		return "redirect:/profile/" + Long.toString(usersId);
 	}
 	
 	//プロフィールページでの投稿削除ボラン押下処理

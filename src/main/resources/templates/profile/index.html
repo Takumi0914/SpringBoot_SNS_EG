@@ -83,7 +83,7 @@
              <div class="card-footer" >
               <div class="row mb-3">
                 <div class="col-sm-4">
-                  <a th:href="@{/profile/comment/delete/{postsId}/{commentsId}(postsId=${post.id}, commentsId=${comments.id})}" class="btn btn-danger">削除する</a>
+                  <a th:href="@{/profile/comment/delete/{postsId}/{commentsId}/{usersId}(postsId=${post.id}, commentsId=${comments.id},usersId=${profUser.id})}" class="btn btn-danger">削除する</a>
                 </div>
               </div>
             </div>
