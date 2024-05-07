@@ -33,6 +33,7 @@ public class Users extends EntityBase {
 	private Long id;
 
 	/** ログインID */
+	
 	@Column(name = "login_id", nullable = false)
 	private String loginId;
 
@@ -41,6 +42,7 @@ public class Users extends EntityBase {
 	private String password;
 
 	/** 名前 */
+	
 	@Column(name = "name", nullable = false)
 	private String name;
 

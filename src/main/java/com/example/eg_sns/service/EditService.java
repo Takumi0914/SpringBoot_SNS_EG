@@ -61,7 +61,7 @@ public class EditService {
 
 	public void update(EditPassword editPassword, Users users) {
 		
-		users.setPassword(editPassword.getNewpassword());
+		users.setPassword(editPassword.getNewpassword1());
 		
 		repository.save(users);
 		

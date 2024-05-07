@@ -28,4 +28,6 @@ public interface CommentsRepository extends PagingAndSortingRepository<Comments,
 	@Transactional
 	void deleteByIdAndUsersIdAndPostsId(Long id, Long usersId, Long postsId);
 	List<Comments> findByUsersIdOrderByIdDesc(Long postsId);
+	
+	void deleteByPostsId(Long postsId);
 }

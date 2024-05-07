@@ -1,10 +1,15 @@
 package com.example.eg_sns.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.eg_sns.dto.RequestComment;
 import com.example.eg_sns.dto.RequestShare;
@@ -63,9 +69,25 @@ public class HomeController extends AppController {
 	
 	@PostMapping("/post")
 	public String post(@Validated @ModelAttribute RequestShare requestShare,
+											BindingResult result,
+											RedirectAttributes redirectAttributes,
+											Model model,
 										  @RequestParam("file") MultipartFile file){
 		
 		log.info("投稿内容を受け取りました。：requestShare={} file={}", requestShare, file);
+
+		// バリデーション。
+		if(result.hasErrors()) {
+			List<String> errorList = new ArrayList<String>();
+			for(ObjectError error : result.getAllErrors()) {
+				errorList.add(error.getDefaultMessage());
+			}
+			redirectAttributes.addFlashAttribute("validationError", errorList);
+			
+			log.info("エラーメッセージを受け取りました。：ValidationError={} ", errorList);
+			
+			return "redirect:/home";
+		}
 		
 			Long usersId = getUsersId();
 
@@ -82,10 +104,27 @@ public class HomeController extends AppController {
 	}
 	
 	@PostMapping("/comment")
-	public String comment(@Validated @ModelAttribute RequestComment requestComment) {
+	public String comment(@Validated @ModelAttribute RequestComment requestComment,
+			BindingResult result,
+			RedirectAttributes redirectAttributes) {
 			//,@ModelAttribute("postId") Long postId) {
 		
 		log.info("コメントを受け取りました。：requestComment={}", requestComment);
+		
+	  Long postsId = requestComment.getPostId();
+	  
+		// バリデーション。
+		if(result.hasErrors()) {
+			Map<Long, BindingResult> errorMap = new HashMap<Long, BindingResult>();
+			errorMap.put(postsId, result);
+			
+			
+			redirectAttributes.addFlashAttribute("commentsValidationError", errorMap);
+			
+			log.info("エラーメッセージを受け取りました。：commentsValidationError={} ", errorMap);
+			
+			return "redirect:/home/"+ "#comment_" + postsId;
+		}
 		
 		requestComment.setUsersId(getUsersId());
 				
@@ -116,6 +155,7 @@ public class HomeController extends AppController {
 		log.info("投稿削除処理のアクションが呼ばれました。：id={} usersId={}", id, usersId);
 
 		postsService.delete(usersId, id);
+		commentsService.delete(id);
 
 		return "redirect:/home";
 	}

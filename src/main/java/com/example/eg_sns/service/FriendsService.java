@@ -33,8 +33,9 @@ public class FriendsService {
 	 */
 
 	
-	 public  List<Friends> findUsers(Long usersId){
-		return (List<Friends>) repository.findByUsersId(usersId) ;
+	 public  Friends findUsers(Long usersId){
+		 Friends friends = repository.findByUsersId(usersId) ;
+		return friends;
 		 
 	 }
 	 
@@ -53,7 +54,6 @@ public class FriendsService {
 
 			return friend;
 		}
-
 
 	/**
 	 * ユーザー登録処理を行う。

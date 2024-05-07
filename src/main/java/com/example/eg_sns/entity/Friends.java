@@ -40,11 +40,6 @@ public class Friends extends EntityBase {
 	@Column(name = "approval_status", nullable = false)
 	private String status;
 
-//	/** 投稿コメント情報の紐づけ */
-//	@OneToMany(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "posts_id", referencedColumnName = "id", insertable = false, updatable = false)
-//	private List<Comments> postCommentsList;
-
 	/** ユーザー情報の紐づけ */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "users_id", referencedColumnName = "id", insertable = false, updatable = false)
