@@ -12,4 +12,7 @@ import com.example.eg_sns.entity.PostImages;
  */
 public interface PostImagesRepository
 		extends PagingAndSortingRepository<PostImages, Long>, CrudRepository<PostImages, Long> {
+	
+	
+	
 }

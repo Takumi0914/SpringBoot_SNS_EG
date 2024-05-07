@@ -43,11 +43,11 @@ public class Posts extends EntityBase {
 	@Column(name = "body", nullable = false)
 	private String body;
 
-//	/** 投稿画像情報の紐づけ */
-//	@OneToMany(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "posts_id", referencedColumnName = "id", insertable = false, updatable = false)
-//	private List<PostImages> postImagesList;
-//
+	/** 投稿画像情報の紐づけ */
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "posts_id", referencedColumnName = "id", insertable = false, updatable = false)
+	private List<PostImages> postImagesList;
+
 	/** 投稿コメント情報の紐づけ */
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "posts_id", referencedColumnName = "id", insertable = false, updatable = false)

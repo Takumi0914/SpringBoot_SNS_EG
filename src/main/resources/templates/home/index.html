@@ -24,11 +24,11 @@
 
           <div class="card"　th:each="post : ${postsList}">
 			  
-			  
-			                
               <div class="card" >
+				  <div th:each="postImages:${post.postImagesList}">
+                  <img th:src="${@storageService.getDataUri(postImages.imageUri)}" src="/assets/img/card.jpg" class="card-img-top" alt="..." />
+                  </div>
 				  
-				 
                 <!-- <img src="/assets/img/card.jpg" class="card-img-top" alt="..."> -->
                 <div class="card-body">
 					<h3 class="card-title" th:text="${post.users.name}">田中広輔</h3>
@@ -86,18 +86,7 @@
                   </div><!-- End sidebar recent posts-->
                 </div>
                 
-               
-               
-            
-            
               </div>
-              <!-- End Table with stripped rows -->
-              
-              		
-           
-               
-
-         
 
             </div>
             
@@ -119,7 +108,7 @@
               </div>
 
               <!-- Vertical Form -->
-              <form class="row g-3" method="post" th:action="@{/home/post}" th:object="${requestShare}">
+              <form class="row g-3" enctype="multipart/form-data" method="post" th:action="@{/home/post}" th:object="${requestShare}">
                 <div class="col-12">
                   <label for="inputNanme4" class="form-label">タイトル</label>
                   <input type="text" name="title" class="form-control" id="inputNanme4">

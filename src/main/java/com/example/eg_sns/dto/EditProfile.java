@@ -1,5 +1,7 @@
 package com.example.eg_sns.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -27,4 +29,8 @@ public class EditProfile extends DtoBase {
 	/** ログインID */
 	@Size(max = 32, message = "プロフィールは最大32文字です。")
 	private String loginId;
+	
+	/** プロフィールアイコンURI */
+	private MultipartFile file;
+	
 }

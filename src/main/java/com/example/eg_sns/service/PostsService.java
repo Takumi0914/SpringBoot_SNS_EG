@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.eg_sns.dto.RequestShare;
+import com.example.eg_sns.entity.PostImages;
 import com.example.eg_sns.entity.Posts;
 import com.example.eg_sns.repository.PostImagesRepository;
 import com.example.eg_sns.repository.PostsRepository;
@@ -36,9 +37,9 @@ public class PostsService {
 	 * @param usersId ユーザーID
 	 * @param postImagesFileUri 投稿画像URI
 	 */
-	public void save(RequestShare requestShare, Long usersId, String postImagesFileUri) {
+	public void save(RequestShare requestShare, Long usersId, String imgUri) {
 		log.info("投稿処理を行います。：requestShare={}, usersId={}, postImagesFileUri={}", requestShare, usersId,
-				postImagesFileUri);
+				imgUri);
 
 		Posts posts = new Posts();
 		posts.setUsersId(usersId);
@@ -48,14 +49,19 @@ public class PostsService {
 		// 投稿データの登録及び、取得。
 		Posts regPosts = repository.save(posts);
 		Long postsId = regPosts.getId();
-
-//		if (postImagesFileUri != null) {
-//			PostImages postImages = new PostImages();
-//			postImages.setPostsId(postsId);
-//			postImages.setUsersId(usersId);
-//			postImages.setImageUri(postImagesFileUri);
-//			postsImagesRepository.save(postImages);
-//		}
+		
+		if(imgUri != null) {
+			PostImages postImages = new PostImages();
+		
+			postImages.setPostsId(postsId);	
+			postImages.setUsersId(usersId);
+			postImages.setImageUri(imgUri);	
+		
+			log.info("画像を保存します。： postImages={}", postImages);
+			
+			postsImagesRepository.save(postImages);
+		}
+		
 	}
 	
 	
@@ -84,7 +90,6 @@ public class PostsService {
 		return (List<Posts>) repository.findByUsersIdOrderByIdDesc(usersId);
 	}
 
-	
-	}
+}
 
 

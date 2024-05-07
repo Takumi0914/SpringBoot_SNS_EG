@@ -94,4 +94,10 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
+
+
+/src/main/resources/static/assets/profileimg/*
+
+!/src/main/resources/static/assets/profileimg/profile-dummy.png
+
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,gradle
