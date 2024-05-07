@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.eg_sns.dto.EditPassword;
 import com.example.eg_sns.dto.EditProfile;
 import com.example.eg_sns.dto.RequestComment;
+import com.example.eg_sns.dto.RequestFriend;
+import com.example.eg_sns.entity.Friends;
 import com.example.eg_sns.entity.Posts;
 import com.example.eg_sns.entity.Users;
 import com.example.eg_sns.service.CommentsService;
@@ -75,7 +78,8 @@ public class ProfileController extends AppController {
 		}
 		model.addAttribute("postsList", postsList);
 		
-		
+		//usersにはログインユーザーならログインユーザーの情報を、
+		//他ユーザーならその情報を取得している
 		Users users = new Users();
 		if(usersId != null) {
 		users = usersService.findUsers(usersId);
@@ -85,7 +89,7 @@ public class ProfileController extends AppController {
 		
 	    model.addAttribute("loginId", loginId);
         model.addAttribute("usersId",usersId);
-		
+       
 		String usersName = users.getName();
 		model.addAttribute("usersName", usersName);
 		
@@ -95,6 +99,24 @@ public class ProfileController extends AppController {
 		
 		log.info("コメントをリフレッシュしました。");
 		
+		
+		Users friendUsers = new Users();
+		Friends friendInfo = new Friends();
+		//他ユーザーを表示しているとき、他ユーザーの
+		if(usersId != null) {
+			friendUsers = usersService.findUsers(loginId);
+			friendInfo = friendsService.findFriends(loginId, usersId);
+		}
+	//	if(friendInfo != null) {
+			friendUsers.setFriendsInfo(friendInfo);
+//		//}else {
+//			friendInfo = 
+//		}
+		  log.info("フレンド情報をセットしました。:friendUsers={}, friendInfo={}", friendUsers, friendInfo);
+		  
+		  model.addAttribute("friendUsers", friendUsers);
+		
+
 		return "profile/index";
 	}
 
@@ -223,7 +245,7 @@ public class ProfileController extends AppController {
 			}
 			redirectAttributes.addFlashAttribute("validationError", errorList);
 			
-			log.info("エラーメッセージを受け取りました。：ValidationError={} ", errorList);
+			log.info("エラーメッセージを受け取りました。：validationError={} ", errorList);
 			
 			return "redirect:/profile";
 		}
@@ -232,6 +254,11 @@ public class ProfileController extends AppController {
 		
 		Users users = getUsers();
 		
+		if(StringUtils.isEmpty(imgUri) && !StringUtils.isEmpty(editprofile.getFileHidden())) {
+			imgUri = editprofile.getFileHidden();
+			
+		}
+		
 		log.info("プロフィール変更が完了しました。");
 		
 		editService.update(editprofile, users, imgUri);
@@ -239,6 +266,121 @@ public class ProfileController extends AppController {
 		return  "redirect:/profile";
 	        
 	}
+	
+	
+	//ここから友達申請等の処理
+	
+	
+	//友達申請ボタン押下時アクション
+	@PostMapping("/add/{friendId}")
+	public String post(@Validated @ModelAttribute RequestFriend requestFriend,@PathVariable(required = false) Long friendId) {
+		
+		log.info("友達申請を受け取りました。：requestFriend={}", requestFriend);
+		
+		/**
+		 * status 
+		 * friendId
+		 * usersId
+		 */
+		
+		Long loginId = getUsersId();
+
+		
+		RequestFriend friend = new RequestFriend();
+		friend.setStatus(requestFriend.getStatus());
+		friend.setFriendId(requestFriend.getFriendId());
+		friend.setUsersId(loginId);
+		
+		log.info("友達申請を送信しました。：friend={}", friend);
+		friendsService.save(friend);
+		
+		RequestFriend friend2 = new RequestFriend();
+		friend2.setStatus("2");
+		friend2.setFriendId(friend.getUsersId());
+		friend2.setUsersId(friend.getFriendId());
+		
+		log.info("友達申請を受信しました。：friend2={}", friend2);
+		
+		friendsService.save(friend2);
+		
+		
+		return "redirect:/profile/" + Long.toString(friendId);
+		
+		
+	}
+			
+			@PostMapping("/delete/{friendId}")
+			public String delete(@Validated @ModelAttribute RequestFriend requestFriend,@PathVariable(required = false) Long friendId) {
+
+				log.info("フレンド却下を受け取りました。：friendId={}", friendId);
+
+				// ログインユーザー情報取得（※自分が投稿したコメント以外を削除しない為の制御。）
+				Long usersId = getUsersId();
+				
+				
+				//ユーザー検索（テーブル検索）
+				//Friends friend = friendsService.findFriends(friendId, usersId);
+
+				// コメント削除処理
+//				friendsService.delete();
+				
+				friendsService.delete(friendId, usersId);
+				
+				Long friendId2 = usersId;
+				Long usersId2 = friendId;
+				
+				friendsService.delete(friendId2, usersId2);
+
+				// 入力画面へリダイレクト。
+				return "redirect:/profile/" + Long.toString(friendId);	
+				
+			}
+			
+			
+			
+			@PostMapping("/regist/{friendId}")
+			public String regist(@Validated @ModelAttribute RequestFriend requestFriend,@PathVariable(required = false) Long friendId) {
+
+				log.info("フレンド追加を受け取りました。： friendId={}", friendId);
+
+				// ログインユーザー情報取得
+				Long usersId = getUsersId();
+				
+				Friends friend = friendsService.findFriends(friendId, usersId);
+
+				
+				//Friends friend =new Friends();
+				
+				// フレンド登録にステータスを変更（３にアップデート）
+				friend.setFriendId(friendId);
+				friend.setUsersId(usersId);
+				friend.setStatus("3");
+				log.info("フレンド追加を送信しました。：friend={} ", friend);
+
+				friendsService.updateStatus(friend);
+				
+				
+				//Idを入れ替えてテーブル両方のテーブルを変更したい
+				Long usersId2 = friendId;
+				Long friendId2 = usersId;
+//				//二段めのテーブルのステータスを変更
+//				Friends friend2 = new Friends();
+//				friend2.setFriendId(friendId2);
+//				friend2.setUsersId(usersId2);
+//				friend2.setStatus("3");
+				
+				Friends friend2 = friendsService.findFriends(friendId2, usersId2);
+				friend2.setFriendId(friendId2);
+				friend2.setUsersId(usersId2);
+				friend2.setStatus("3");
+				log.info("フレンド追加を送信しました。：friend={} ", friend2);
+				
+				friendsService.updateStatus(friend2);
+
+				// 入力画面へリダイレクト。
+				return "redirect:/profile/" + Long.toString(friendId);
+				
+			}
 	
 	
 }

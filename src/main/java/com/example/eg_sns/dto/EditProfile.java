@@ -35,4 +35,6 @@ public class EditProfile extends DtoBase {
 	/** プロフィールアイコンURI */
 	private MultipartFile file;
 	
+	private String fileHidden;
+	
 }

@@ -23,23 +23,15 @@
                     <p class="text-center small">個人情報を入力してアカウントを作成してください。</p>
                   </div>
 
-                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <div>
-                      <i class="bi bi-exclamation-octagon me-1"></i>
-                      <span>エラーメッセージを表示します。</span>
-                    </div>
-                    <div>
-                      <i class="bi bi-exclamation-octagon me-1"></i>
-                      <span>エラーメッセージを表示します。</span>
-                    </div>
-                    <div>
-                      <i class="bi bi-exclamation-octagon me-1"></i>
-                      <span>エラーメッセージを表示します。</span>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
+                  <div role="alert" class="alert alert-danger alert-dismissible fade show" th:if="${accountValidationError != null}">
+						  <div  th:each="error :  ${accountValidationError}">
+                   	  			<i class="bi bi-exclamation-octagon me-1"></i>
+                    	  		<span th:text="${error}">エラーメッセージを表示します。</span>
+                    	  	</div>
+                    	  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                   		</div>
 
-                  <form class="row g-3 needs-validation" method="post" th:action="@{/account/regist}" novalidate>
+                  <form class="row g-3 " method="post" th:action="@{/account/regist}" novalidate>
                     <div class="col-12">
                       <label for="yourName" class="form-label">お名前</label>
                       <input type="text" name="name" class="form-control" id="yourName" required>

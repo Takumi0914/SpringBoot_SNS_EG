@@ -38,17 +38,7 @@ public class FriendController extends AppController {
 	@GetMapping("/list")
 	public String list(Model model) {
 		
-		List<Users> usersList = usersService.findAllUsers();
-		
 		Long loginId = getUsersId();
-		
-//		//ユーザーからログインユーザを除いたリストを作成
-//     	List<Users> friendsList = new ArrayList<Users>();
-//		for(Users friend : usersList) {
-//			if(loginId != friend.getId()) {
-//				friendsList.add(friend);
-//			}
-//		}
 		
 		Iterable<Users> usersList2 = usersService.findAllUsers();
 		List<Users> usersList3 = new ArrayList<Users>();
@@ -76,14 +66,9 @@ public class FriendController extends AppController {
 			}
 		}
 		
-		
 		model.addAttribute("usersList3", usersList3);
 		log.info("フレンドリストを受け取りました。：usersList3={}", usersList3);
 
-		
-		
-		
-		
 		return "friend/list";
 	}
 	

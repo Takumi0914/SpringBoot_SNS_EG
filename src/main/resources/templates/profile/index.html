@@ -103,30 +103,54 @@
              	<h2 th:text="${usersName}">佐藤太郎</h2>
               <div class="social-links mt-2">
 			     <th:block th:if="${usersId != loginId && usersId != null}">
-                		<form th:action="@{/friend/add/{friendId}(friendId=${usersId})}" th:object="${requestFriend}" method="post">
+                	<td th:if="${friendUsers.friendsInfo != null}" th:switch="${friendUsers.friendsInfo.status}">
+						
+						<div th:case="2">
+							<button type="button" class="btn btn-secondary rounded-pill" disabled="disabled">申請済み</button>
+							<form th:action="@{/profile/delete/{friendId}(friendId=${friendUsers.friendsInfo.usersId})}" th:object="${requestFriend}" method="post">
+								<input type="hidden" name="friendId" th:value=${friendUsers.friendsInfo.usersId}>
+								<button type="submit" class="btn btn-danger rounded-pill">申請取消</button>
+							</form>
+						</div>
+						
+						<div th:case="1">
+							
+							<form th:action="@{/profile/regist/{friendId}(friendId=${friendUsers.friendsInfo.usersId})}" th:object="${requestFriend}" method="post">
+								<input type="hidden" name="friendId" th:value=${friendUsers.friendsInfo.usersId}>
+								<button type="submit" class="btn btn-primary rounded-pill">承認</button>
+							</form>
+							
+							<form th:action="@{/profile/delete/{friendId}(friendId=${friendUsers.friendsInfo.usersId})}" th:object="${requestFriend}" method="post">
+								<input type="hidden" name="friendId" th:value=${friendUsers.friendsInfo.usersId}>
+								<button type="submit" class="btn btn-danger rounded-pill">却下</button>
+							</form>
+							
+						</div>
+						
+						<div th:case="3">
+							<button type="button" class="btn btn-secondary rounded-pill" disabled="disabled">フレンド</button>
+							<form th:action="@{/profile/delete/{friendId}(friendId=${friendUsers.friendsInfo.usersId})}" th:object="${requestFriend}" method="post">
+								<input type="hidden" name="friendId" th:value=${friendUsers.friendsInfo.usersId}>
+								<button type="submit" class="btn btn-danger rounded-pill">フレンド削除</button>
+							</form>
+						</div>
+						
+					</td>
+					
+					<td th:if="${friendUsers.friendsInfo == null}" >
+                       <form th:action="@{/profile/add/{friendId}(friendId=${usersId})}" th:object="${requestFriend}" method="post">
 							<input type="hidden" name="friendId" th:value=${usersId}>
-                	    	<button type="submit" class="btn btn-primary rounded-pill" name=status value="1">友達申請</button>
-            			</form>
+                		 	    <button type="submit" class="btn btn-primary rounded-pill" name=status value="1">友達申請</button>
+                		   </form>
+                    </td>
               	  </th:block>
               	
           	  </div>
           </div>
           
-           <div role="alert" class="alert alert-danger alert-dismissible fade show" th:if="${validationError != null}">
-						  <div  th:each="error :  ${validationError}">
-                   	  			<i class="bi bi-exclamation-octagon me-1"></i>
-                    	  		<span th:text="${error}">エラーメッセージを表示します。</span>
-                    	  	</div>
-                    	  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                   		</div>
+          
                    		
-               	 <div role="alert" class="alert alert-danger alert-dismissible fade show" th:if="${passwordValidationError != null}">
-						  <div  th:each="error :  ${passwordValidationError}">
-                   	  			<i class="bi bi-exclamation-octagon me-1"></i>
-                    	  		<span th:text="${error}">エラーメッセージを表示します。</span>
-                    	  	</div>
-                    	  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                   		</div>
+               	
 
           <div class="card">
             <div class="card-body pt-3">
@@ -138,37 +162,37 @@
 				  
 
                 <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">基本データ</button>
+                  <button th:classappend="${validationError == null && passwordValidationError == null} ? 'active' : ''" class="nav-link " data-bs-toggle="tab" data-bs-target="#profile-overview">基本データ</button>
                 </li>
                 
                 
                 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" >プロフィール編集</button>
+                  <button th:classappend="${validationError == null } ? '' : 'active'" class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" >プロフィール編集</button>
                 </li>
                 
                 
                 
       
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">パスワード変更</button>
+                  <button th:classappend="${passwordValidationError == null} ? '' : 'active'" class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">パスワード変更</button>
                 </li>
               </ul>
               
               
               <div class="tab-content pt-2">
 
-                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                <div th:classappend="${validationError == null && passwordValidationError == null} ? 'active show' : ''" class="tab-pane fade  profile-overview" id="profile-overview">
                   <h5 class="card-title">自己紹介</h5>
+                  
+                   <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">ユーザーネーム</div>
+                    <div class="col-lg-9 col-md-8" th:text='${users.name}'> </div>
+                  </div>
                
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label ">プロフィール</div>
                     <div class="col-lg-9 col-md-8" th:text='${users.profile}'> </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label ">ユーザーネーム</div>
-                    <div class="col-lg-9 col-md-8" th:text='${users.name}'> </div>
                   </div>
 
                   <div class="row">
@@ -181,30 +205,35 @@
                     <div class="col-lg-9 col-md-8" th:text='${users.loginId}'></div>
                   </div>
 
-                </div>
+               </div>
+				
 
-                <div class="tab-pane fade profile-edit pt-3" id="profile-edit" name="profile-edit">
+
+                <div th:classappend="${validationError == null } ? '' : 'active show'" class="tab-pane fade profile-edit pt-3" id="profile-edit" name="profile-edit">
 					
-					 
-                    
-                 
-                  
-                 
+					 <div role="alert" class="alert alert-danger alert-dismissible fade show" th:if="${validationError != null}">
+						  <div  th:each="error :  ${validationError}">
+                   	  			<i class="bi bi-exclamation-octagon me-1"></i>
+                    	  		<span th:text="${error}">エラーメッセージを表示します。</span>
+                    	  	</div>
+                    	  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                   		</div>
+					
                   <form method="post" enctype="multipart/form-data" th:action="@{/profile/edit}" novalidate th:object="${editProfile}"> 
 				　
                     <div class="row mb-3">
                       <label for="profileImage" class="col-md-4 col-lg-4 col-form-label">プロフィール画像</label>
                       <div class="col-md-8 col-lg-8">
 						<span id="previewbox">
-							<img src="/assets/profileimg/profile-dummy.png" id="previewimg" style="height: 120px;" />
+							<img th:src="${users.iconUri}" id="previewimg" class="rounded-circle" style="height: 120px;" />
 						</span>
                     
                          <div class="pt-2">
                          			 <label>                      				
 										 <span class="btn btn-primary btn-sm" title="Upload new profile image"> <i class="bi bi-upload btn btn-primary btn-sm"></i></span>
-                           			 	<input type="file" name="file" id="filesend" style="display: none" th:value="${users.iconUri}">
+                           			 	<input type="file" name="file" id="filesend" style="display: none">
+                           			 	<input type="hidden" name="fileHidden" id="FileHidden" th:value="${users.iconUri}">
                           			  </label>
-                          			  
                           			  <a href="#" class="btn btn-danger" title="Remove my profile image" onclick="resetPreview();"><i class="bi bi-trash"></i></a>
           
                       	  </div>
@@ -255,14 +284,16 @@
 
                 </div>
 
-                <div class="tab-pane fade pt-3" id="profile-change-password">
+                <div th:classappend="${passwordValidationError == null} ? '' : 'active show'" class="tab-pane fade pt-3" id="profile-change-password">
+					
+					 <div role="alert" class="alert alert-danger alert-dismissible fade show" th:if="${passwordValidationError != null}">
+						  <div  th:each="error :  ${passwordValidationError}">
+                   	  			<i class="bi bi-exclamation-octagon me-1"></i>
+                    	  		<span th:text="${error}">エラーメッセージを表示します。</span>
+                    	  	</div>
+                    	  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                   		</div>
                  
-
-                  <!-- Change Password Form -->
-                  
-                  
-                
-                
                   <form method="post" th:action="@{/profile/password}" novalidate th:object="${editPassword}">
                     <div class="row mb-3">
                       <label for="currentPassword" class="col-md-4 col-lg-4 col-form-label">現在のパスワード</label>
@@ -294,8 +325,10 @@
                   </form><!-- End Change Password Form -->
 
                 </div>
+                
+                </div>
 
-              </div><!-- End Bordered Tabs -->
+             <!-- End Bordered Tabs -->
 
             </div>
           </div>
