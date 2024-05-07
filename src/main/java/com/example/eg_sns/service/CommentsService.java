@@ -54,6 +54,12 @@ public class CommentsService {
 
 		repository.deleteByIdAndUsersIdAndPostsId(id, usersId, postsId);
 	}
+	
+	public void delete(Long postsId) {
+		log.info("コメントを削除します。： postsId={}",  postsId);
+		
+		repository.deleteByPostsId(postsId);
+	}
 
 	/**
 	 * コメントの削除処理を行う。

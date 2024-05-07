@@ -1,10 +1,14 @@
 package com.example.eg_sns.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -58,15 +62,15 @@ public class AccountController {
 
 		log.info("アカウント作成処理のアクションが呼ばれました。：requestAccount={}", requestAccount);
 
-		// バリデーション。
-		if (result.hasErrors()) {
-			// javascriptのバリデーションを改ざんしてリクエストした場合に通る処理。
-			log.warn("バリデーションエラーが発生しました。：requestAccount={}, result={}", requestAccount, result);
-
-			redirectAttributes.addFlashAttribute("validationErrors", result);
-			redirectAttributes.addFlashAttribute("requestAccount", requestAccount);
-
-			// 入力画面へリダイレクト。
+		if(result.hasErrors()) {
+			List<String> errorList = new ArrayList<String>();
+			for(ObjectError error : result.getAllErrors()) {
+				errorList.add(error.getDefaultMessage());
+			}
+			redirectAttributes.addFlashAttribute("accountValidationError", errorList);
+			
+			log.info("エラーメッセージを受け取りました。：accountValidationError={} ", errorList);
+			
 			return "redirect:/account";
 		}
 

@@ -23,14 +23,18 @@ public class EditProfile extends DtoBase {
 	private String email;
 
 	/** プロフィール */
+	@NotBlank(message = "自己紹介を入力してください。")
 	@Size(max = 2000, message = "プロフィールは最大2000文字です。")
 	private String profile;
 	
 	/** ログインID */
+	@NotBlank(message = "ログインIDを入力してください。")
 	@Size(max = 32, message = "プロフィールは最大32文字です。")
 	private String loginId;
 	
 	/** プロフィールアイコンURI */
 	private MultipartFile file;
+	
+	private String fileHidden;
 	
 }
