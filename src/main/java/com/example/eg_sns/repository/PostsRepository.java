@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.eg_sns.entity.Posts;
 
-
 /**
  * 投稿関連リポジトリインターフェース。
  */
@@ -17,6 +16,7 @@ public interface PostsRepository extends PagingAndSortingRepository<Posts, Long>
 	/**
 	 * 投稿一覧を取得する。
 	 * 投稿IDの降順。
+	 * 
 	 * @return 投稿一覧を返す。
 	 */
 	List<Posts> findByOrderByIdDesc();
@@ -24,10 +24,17 @@ public interface PostsRepository extends PagingAndSortingRepository<Posts, Long>
 	/**
 	 * 投稿一覧を取得する。
 	 * 投稿IDの降順。
+	 * 
 	 * @param usersId ユーザーID
 	 * @return 投稿一覧を返す。
 	 */
 	List<Posts> findByUsersIdOrderByIdDesc(Long usersId);
+
+	List<Posts> findTop5ByIdGreaterThanEqual(Long id);
+
+	List<Posts> findTop5OrderByIdGreaterThan(Long id);
+
+	List<Posts> findFirst1ByOrderById();
 
 	@Transactional
 	void deleteByUsersIdAndId(Long usersId, Long id);
