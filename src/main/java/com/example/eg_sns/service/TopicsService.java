@@ -58,7 +58,7 @@ public class TopicsService {
 	 * トピック登録処理を行う。
 	 *
 	 * @param requestTopic トピックDTO
-	 * @param usersId ユーザーID
+	 * @param usersId      ユーザーID
 	 */
 	public Topics save(RequestTopic requestTopic, Long usersId) {
 		Topics topics = new Topics();
@@ -72,7 +72,7 @@ public class TopicsService {
 	 * トピックの削除処理を行う。
 	 *
 	 * @param topicsId トピックID
-	 * @param usersId ユーザーID
+	 * @param usersId  ユーザーID
 	 */
 	public void delete(Long topicsId, Long usersId) {
 		log.info("トピックを削除します。：topicsId={}, usersId={}", topicsId, usersId);
@@ -83,14 +83,14 @@ public class TopicsService {
 			// データが取得できない場合は不正操作の為エラー。（404エラーとする。）
 			throw new AppNotFoundException();
 		}
-//
-//		// トピックにぶら下がってるコメントを削除。
-//		List<Comments> commentsList = topics.getCommentsList();
-//		if (CollectionUtil.isNotEmpty(commentsList)) {
-//			commentsService.delete(commentsList);
-		}
+		//
+		// // トピックにぶら下がってるコメントを削除。
+		// List<Comments> commentsList = topics.getCommentsList();
+		// if (CollectionUtil.isNotEmpty(commentsList)) {
+		// commentsService.delete(commentsList);
+	}
 
-//		// トピックを削除。
-//		repository.delete(topics);
-//	}
+	// // トピックを削除。
+	// repository.delete(topics);
+	// }
 }

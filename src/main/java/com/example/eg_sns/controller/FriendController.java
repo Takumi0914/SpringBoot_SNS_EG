@@ -28,21 +28,21 @@ import lombok.extern.log4j.Log4j2;
 @Controller
 @RequestMapping("/friend")
 public class FriendController extends AppController {
-	
+
 	@Autowired
 	private FriendsService friendsService;
-	
+
 	@Autowired
 	private UsersService usersService;
 
 	@GetMapping("/list")
 	public String list(Model model) {
-		
+
 		Long loginId = getUsersId();
-		
+
 		Iterable<Users> usersList2 = usersService.findAllUsers();
 		List<Users> usersList3 = new ArrayList<Users>();
-		
+
 		List<Friends> tmpFriendsList = null;
 		for (Users users : usersList2) {
 			if (loginId.equals(users.getId().longValue())) {
@@ -51,7 +51,7 @@ public class FriendController extends AppController {
 				usersList3.add(users);
 			}
 		}
-		
+
 		for (Friends friends : tmpFriendsList) {
 			Long friendUsersId = friends.getFriendId();
 
@@ -65,148 +65,138 @@ public class FriendController extends AppController {
 				}
 			}
 		}
-		
+
 		model.addAttribute("usersList3", usersList3);
 		log.info("フレンドリストを受け取りました。：usersList3={}", usersList3);
 
 		return "friend/list";
 	}
-	
-	
-	//友達申請ボタン押下時アクション
-		@PostMapping("/add/{friendId}")
-		public String post(@Validated @ModelAttribute RequestFriend requestFriend,@PathVariable(required = false) Long friendId) {
-			
-			log.info("友達申請を受け取りました。：requestFriend={}", requestFriend);
-			
-			/**
-			 * status 
-			 * friendId
-			 * usersId
-			 */
-			
-			Long loginId = getUsersId();
 
-			
-			RequestFriend friend = new RequestFriend();
-			friend.setStatus(requestFriend.getStatus());
-			friend.setFriendId(requestFriend.getFriendId());
-			friend.setUsersId(loginId);
-			
-			log.info("友達申請を送信しました。：friend={}", friend);
-			friendsService.save(friend);
-			
-			RequestFriend friend2 = new RequestFriend();
-			friend2.setStatus("2");
-			friend2.setFriendId(friend.getUsersId());
-			friend2.setUsersId(friend.getFriendId());
-			
-			log.info("友達申請を受信しました。：friend2={}", friend2);
-			
-			friendsService.save(friend2);
-			
-			
-			return "redirect:/profile/" + Long.toString(friendId);
-			
-			
-		}
-		
-		//友達申請ボタン押下時アクション
-				@PostMapping("/list/add/{friendId}")
-				public String post2(@Validated @ModelAttribute RequestFriend requestFriend,@PathVariable(required = false) Long friendId) {
-					
-					log.info("友達申請を受け取りました。：requestFriend={}", requestFriend);
-					
-					/**
-					 * status 
-					 * friendId
-					 * usersId
-					 */
-					
-					Long loginId = getUsersId();
+	// 友達申請ボタン押下時アクション
+	@PostMapping("/add/{friendId}")
+	public String post(@Validated @ModelAttribute RequestFriend requestFriend,
+			@PathVariable(required = false) Long friendId) {
 
-					
-					RequestFriend friend = new RequestFriend();
-					friend.setStatus(requestFriend.getStatus());
-					friend.setFriendId(requestFriend.getFriendId());
-					friend.setUsersId(loginId);
-					
-					log.info("友達申請を送信しました。：friend={}", friend);
-					friendsService.save(friend);
-					
-					RequestFriend friend2 = new RequestFriend();
-					friend2.setStatus("2");
-					friend2.setFriendId(friend.getUsersId());
-					friend2.setUsersId(friend.getFriendId());
-					
-					log.info("友達申請を受信しました。：friend2={}", friend2);
-					
-					friendsService.save(friend2);
-					
-					
-					return "redirect:/friend/list" ;
-					
-					
-				}
-				
-				@PostMapping("/delete/{friendId}")
-				public String delete(@Validated @ModelAttribute RequestFriend requestFriend,@PathVariable(required = false) Long friendId) {
+		log.info("友達申請を受け取りました。：requestFriend={}", requestFriend);
 
-					log.info("フレンド却下を受け取りました。：friendId={}", friendId);
+		/**
+		 * status
+		 * friendId
+		 * usersId
+		 */
 
-					// ログインユーザー情報取得（※自分が投稿したコメント以外を削除しない為の制御。）
-					Long usersId = getUsersId();
-					
-					friendsService.delete(friendId, usersId);
-					
-					Long friendId2 = usersId;
-					Long usersId2 = friendId;
-					
-					friendsService.delete(friendId2, usersId2);
+		Long loginId = getUsersId();
 
-					// 入力画面へリダイレクト。
-					return "redirect:/friend/list";
-				}
-				
-				@PostMapping("/regist/{friendId}")
-				public String regist(@Validated @ModelAttribute RequestFriend requestFriend,@PathVariable(required = false) Long friendId) {
+		RequestFriend friend = new RequestFriend();
+		friend.setStatus(requestFriend.getStatus());
+		friend.setFriendId(requestFriend.getFriendId());
+		friend.setUsersId(loginId);
 
-					log.info("フレンド追加を受け取りました。： friendId={}", friendId);
+		log.info("友達申請を送信しました。：friend={}", friend);
+		friendsService.save(friend);
 
-					// ログインユーザー情報取得
-					Long usersId = getUsersId();
-					
-					Friends friend = friendsService.findFriends(friendId, usersId);
+		RequestFriend friend2 = new RequestFriend();
+		friend2.setStatus("2");
+		friend2.setFriendId(friend.getUsersId());
+		friend2.setUsersId(friend.getFriendId());
 
+		log.info("友達申請を受信しました。：friend2={}", friend2);
 
+		friendsService.save(friend2);
 
-					// フレンド登録にステータスを変更（３にアップデート）
-					friend.setFriendId(friendId);
-					friend.setUsersId(usersId);
-					friend.setStatus("3");
-					log.info("フレンド追加を送信しました。：friend={} ", friend);
+		return "redirect:/profile/" + Long.toString(friendId);
 
-					friendsService.updateStatus(friend);
-					
-					
-					//Idを入れ替えてテーブル両方のテーブルを変更したい
-					Long usersId2 = friendId;
-					Long friendId2 = usersId;
+	}
 
+	// 友達申請ボタン押下時アクション
+	@PostMapping("/list/add/{friendId}")
+	public String post2(@Validated @ModelAttribute RequestFriend requestFriend,
+			@PathVariable(required = false) Long friendId) {
 
+		log.info("友達申請を受け取りました。：requestFriend={}", requestFriend);
 
-					
-					Friends friend2 = friendsService.findFriends(friendId2, usersId2);
-					friend2.setFriendId(friendId2);
-					friend2.setUsersId(usersId2);
-					friend2.setStatus("3");
-					log.info("フレンド追加を送信しました。：friend={} ", friend2);
-					
-					friendsService.updateStatus(friend2);
+		/**
+		 * status
+		 * friendId
+		 * usersId
+		 */
 
-					// 入力画面へリダイレクト。
-					return "redirect:/friend/list";
-				}
-	
-	
+		Long loginId = getUsersId();
+
+		RequestFriend friend = new RequestFriend();
+		friend.setStatus(requestFriend.getStatus());
+		friend.setFriendId(requestFriend.getFriendId());
+		friend.setUsersId(loginId);
+
+		log.info("友達申請を送信しました。：friend={}", friend);
+		friendsService.save(friend);
+
+		RequestFriend friend2 = new RequestFriend();
+		friend2.setStatus("2");
+		friend2.setFriendId(friend.getUsersId());
+		friend2.setUsersId(friend.getFriendId());
+
+		log.info("友達申請を受信しました。：friend2={}", friend2);
+
+		friendsService.save(friend2);
+
+		return "redirect:/friend/list";
+
+	}
+
+	@PostMapping("/delete/{friendId}")
+	public String delete(@Validated @ModelAttribute RequestFriend requestFriend,
+			@PathVariable(required = false) Long friendId) {
+
+		log.info("フレンド却下を受け取りました。：friendId={}", friendId);
+
+		// ログインユーザー情報取得（※自分が投稿したコメント以外を削除しない為の制御。）
+		Long usersId = getUsersId();
+
+		friendsService.delete(friendId, usersId);
+
+		Long friendId2 = usersId;
+		Long usersId2 = friendId;
+
+		friendsService.delete(friendId2, usersId2);
+
+		// 入力画面へリダイレクト。
+		return "redirect:/friend/list";
+	}
+
+	@PostMapping("/regist/{friendId}")
+	public String regist(@Validated @ModelAttribute RequestFriend requestFriend,
+			@PathVariable(required = false) Long friendId) {
+
+		log.info("フレンド追加を受け取りました。： friendId={}", friendId);
+
+		// ログインユーザー情報取得
+		Long usersId = getUsersId();
+
+		Friends friend = friendsService.findFriends(friendId, usersId);
+
+		// フレンド登録にステータスを変更（３にアップデート）
+		friend.setFriendId(friendId);
+		friend.setUsersId(usersId);
+		friend.setStatus("3");
+		log.info("フレンド追加を送信しました。：friend={} ", friend);
+
+		friendsService.updateStatus(friend);
+
+		// Idを入れ替えてテーブル両方のテーブルを変更したい
+		Long usersId2 = friendId;
+		Long friendId2 = usersId;
+
+		Friends friend2 = friendsService.findFriends(friendId2, usersId2);
+		friend2.setFriendId(friendId2);
+		friend2.setUsersId(usersId2);
+		friend2.setStatus("3");
+		log.info("フレンド追加を送信しました。：friend={} ", friend2);
+
+		friendsService.updateStatus(friend2);
+
+		// 入力画面へリダイレクト。
+		return "redirect:/friend/list";
+	}
+
 }

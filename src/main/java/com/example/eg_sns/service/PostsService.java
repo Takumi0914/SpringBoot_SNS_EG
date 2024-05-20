@@ -1,6 +1,5 @@
 package com.example.eg_sns.service;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import lombok.extern.log4j.Log4j2;
 @Service
 public class PostsService {
 
-
 	/** リポジトリインターフェース。 */
 	@Autowired
 	private PostsRepository repository;
@@ -33,8 +31,8 @@ public class PostsService {
 	/**
 	 * 投稿処理を行う。
 	 *
-	 * @param requestShare コメント投稿DTO
-	 * @param usersId ユーザーID
+	 * @param requestShare      コメント投稿DTO
+	 * @param usersId           ユーザーID
 	 * @param postImagesFileUri 投稿画像URI
 	 */
 	public void save(RequestShare requestShare, Long usersId, String imgUri) {
@@ -49,24 +47,22 @@ public class PostsService {
 		// 投稿データの登録及び、取得。
 		Posts regPosts = repository.save(posts);
 		Long postsId = regPosts.getId();
-		
-		if(imgUri != null) {
+
+		if (imgUri != null) {
 			PostImages postImages = new PostImages();
-		
-			postImages.setPostsId(postsId);	
+
+			postImages.setPostsId(postsId);
 			postImages.setUsersId(usersId);
-			postImages.setImageUri(imgUri);	
-		
+			postImages.setImageUri(imgUri);
+
 			log.info("画像を保存します。： postImages={}", postImages);
-			
+
 			postsImagesRepository.save(postImages);
 		}
-		
+
 	}
 
-	
-	
-	public void delete( Long usersId, Long id) {
+	public void delete(Long usersId, Long id) {
 		log.info("コメントを削除します。： usersId={}, commentsId={}", usersId, id);
 
 		repository.deleteByUsersIdAndId(usersId, id);
@@ -75,6 +71,7 @@ public class PostsService {
 	/**
 	 * 投稿一覧を取得する。
 	 * 投稿IDの降順。
+	 * 
 	 * @return 投稿一覧を返す。
 	 */
 	public List<Posts> findAllPosts() {
@@ -84,6 +81,7 @@ public class PostsService {
 	/**
 	 * 投稿一覧を取得する。
 	 * 投稿IDの降順。
+	 * 
 	 * @param usersId ユーザーID
 	 * @return 投稿一覧を返す。
 	 */
@@ -91,6 +89,16 @@ public class PostsService {
 		return (List<Posts>) repository.findByUsersIdOrderByIdDesc(usersId);
 	}
 
+	public List<Posts> findTop5(Long id) {
+		return (List<Posts>) repository.findTop5ByIdGreaterThanEqual(id);
+	}
+
+	public List<Posts> findTop5Besides(Long id) {
+		return (List<Posts>) repository.findTop5OrderByIdGreaterThan(id);
+	}
+
+	public List<Posts> findFirst1ByOrderById() {
+		return (List<Posts>) repository.findFirst1ByOrderById();
+	}
+
 }
-
-
