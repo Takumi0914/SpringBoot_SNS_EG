@@ -43,6 +43,7 @@ public class PostsService {
 		posts.setUsersId(usersId);
 		posts.setTitle(requestShare.getTitle());
 		posts.setBody(requestShare.getBody());
+		posts.setCategory(requestShare.getCategory());
 
 		// 投稿データの登録及び、取得。
 		Posts regPosts = repository.save(posts);

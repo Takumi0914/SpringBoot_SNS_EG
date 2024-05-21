@@ -178,5 +178,11 @@ public class HomeController extends AppController {
 
 		return "home/index :: List-fragment";
 	}
+	
+	@GetMapping("/category")
+	public String category(@RequestParam int category) {
+		return null;
+		
+	}
 
 }

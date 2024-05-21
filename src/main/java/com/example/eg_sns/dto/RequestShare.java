@@ -23,6 +23,10 @@ public class RequestShare extends DtoBase {
 	@Size(max = 2000, message = "コメント本文は最大2000文字です。")
 	private String body;
 	
+	/** 本文 */
+	@NotBlank(message = "カテゴリーを選択してください。")
+	private String category;
+	
 //	@NotBlank(message = "コメント本文を入力してください。")
 //	@Size(max = 2000, message = "コメント本文は最大2000文字です。")
 //	private String body;
