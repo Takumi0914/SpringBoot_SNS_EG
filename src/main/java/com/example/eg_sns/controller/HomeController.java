@@ -180,9 +180,14 @@ public class HomeController extends AppController {
 	}
 	
 	@GetMapping("/category")
-	public String category(@RequestParam int category) {
-		return null;
+	public String category(@RequestParam Long category, Model model) {
+		List<Posts> categorizedPostsList = postsService.findByCategory(category);
+		
+		model.addAttribute("displayPostsList", categorizedPostsList);
+		model.addAttribute("requestComment", new RequestComment());
+		
+		return "home/index :: List-fragment";
 		
 	}
-
+	
 }

@@ -101,5 +101,9 @@ public class PostsService {
 	public List<Posts> findFirst1ByOrderById() {
 		return (List<Posts>) repository.findFirst1ByOrderById();
 	}
+	
+	public List<Posts> findByCategory(Long category){
+		return(List<Posts>) repository.findByCategory(category);
+	}
 
 }

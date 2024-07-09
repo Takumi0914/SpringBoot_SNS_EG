@@ -45,7 +45,7 @@ public class Posts extends EntityBase {
 	
 	/** カテゴリ */
 	@Column(name = "category", nullable = false)
-	private String category;
+	private Long category;
 	
 	
 
