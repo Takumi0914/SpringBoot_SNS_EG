@@ -43,6 +43,7 @@ public class PostsService {
 		posts.setUsersId(usersId);
 		posts.setTitle(requestShare.getTitle());
 		posts.setBody(requestShare.getBody());
+		posts.setCategory(requestShare.getCategory());
 
 		// 投稿データの登録及び、取得。
 		Posts regPosts = repository.save(posts);
@@ -99,6 +100,10 @@ public class PostsService {
 
 	public List<Posts> findFirst1ByOrderById() {
 		return (List<Posts>) repository.findFirst1ByOrderById();
+	}
+	
+	public List<Posts> findByCategory(Long category){
+		return(List<Posts>) repository.findByCategory(category);
 	}
 
 }

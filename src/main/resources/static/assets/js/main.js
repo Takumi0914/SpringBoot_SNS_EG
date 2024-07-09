@@ -403,19 +403,17 @@ function resetPreview(isSampleView = true) {
 //もっと見るボタン設定
 
 const moreButton = document.getElementById("moreButton");
-console.log(moreButton);
 //ボタンにidが詰まっているわけではない
 const limit = 5;
 
 moreButton.addEventListener("click", function () {
   const itemsList = document.getElementById("postsList");
-  console.log(itemsList);
   const lastCard = itemsList.querySelectorAll(".card");
   const lastPostId = lastCard[lastCard.length - 1].querySelector(
     'input[name="postId"]'
   ).value;
 
-  console.log(lastPostId);
+
 
   fetch(`/home/more?lastPostId=${lastPostId}&limit=${limit}`)
     .then((response) => response.text())

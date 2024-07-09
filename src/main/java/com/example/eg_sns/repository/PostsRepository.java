@@ -35,6 +35,8 @@ public interface PostsRepository extends PagingAndSortingRepository<Posts, Long>
 	List<Posts> findTop5OrderByIdGreaterThan(Long id);
 
 	List<Posts> findFirst1ByOrderById();
+	
+	List<Posts> findByCategory(Long category);
 
 	@Transactional
 	void deleteByUsersIdAndId(Long usersId, Long id);

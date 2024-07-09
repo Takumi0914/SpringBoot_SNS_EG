@@ -13,10 +13,30 @@
     <div class="pagetitle">
       <h1>Home</h1>
     </div>
+    
+
     <!-- End Page Title -->
     <section class="section">
       <div class="row">
         <div class="col-lg-8">
+			<div>
+				  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+				 <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100 active" id="pills-all-tab" data-bs-toggle="tab" data-bs-target="#all-justified" type="button" role="tab" aria-controls="all" aaria-selected="true" >すべて </button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100" id="pills-work-tab" data-bs-toggle="tab" data-bs-target="#work-justified" type="button" role="tab" aria-controls="work" aria-selected="false" tabindex="-1">仕事</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100" id="pills-travel-tab" data-bs-toggle="tab" data-bs-target="#travel-justified" type="button" role="tab" aria-controls="travel" aria-selected="false" tabindex="-1">旅行</button>
+                </li>
+                <li class="nav-item flex-fill" role="presentation">
+                  <button class="nav-link w-100 " id="pills-living-tab" data-bs-toggle="tab" data-bs-target="#living-justified" type="button" role="tab" aria-controls="living" aria-selected="false" tabindex="-1">日常</button>
+                </li>
+              </ul>
+			</div>
+			  
+              
           <div th:fragment="List-fragment">
             <div id="postsList">
               <div th:each="post : ${displayPostsList}">
@@ -27,7 +47,7 @@
                   <!-- <img src="/assets/img/card.jpg" class="card-img-top" alt="..."> -->
                   <div class="card-body">
                     <h3 class="card-title" th:text="${post.users.name}">田中広輔</h3>
-                    <h5 th:id="|comment_${post.id}|" class="card-title" th:text="${post.id}+':'+${post.title}">リラックスしてカフェタイムを楽しむ！テラスでのカフェ体験</h5>
+                    <h5 th:id="|comment_${post.id}|" class="card-title" th:text="${post.id}+':'+${post.title}+': category'+ ${post.category}">リラックスしてカフェタイムを楽しむ！テラスでのカフェ体験</h5>
                     <p class="card-text" th:text="${post.body}">こんにちは、皆さん！今日は素晴らしいテラスでのカフェ体験についてお話ししたいと思います。最近、私は忙しい日常生活から離れるために、テラスでカフェを楽しむことを好んでいます。そこで、今回は私のおすすめのテラスカフェを紹介しつつ、リラックスしてカフェタイムを過ごす方法をご紹介します。
                       <br>
                       <br>私が行ったカフェは、美しい景色が見渡せるテラス席が魅力のカフェでした。テラスでコーヒーや紅茶を飲みながら、日差しを浴びていると、とてもリラックスできます。また、周りの自然の風景を見ながら、ストレスが吹き飛ぶような気分になります。
@@ -89,13 +109,7 @@
             </div>
           </div>
           <div>
-			  <!--
-            <form th:action="@{/home/more}" method="get"  id="moreBtn">
-              <input type="hidden" name="lastPostId" th:value="${lastPostId}" id="lastPostId" class="lastPostId">
-              <input type="hidden" name="limit" value="5">
-              <button class="btn btn-primary" type="button" id="moreButton">もっと見る</button>
-            </form>
-            	-->
+			 
             	<button class="btn btn-primary" type="button" id="moreButton">もっと見る</button>
 
           </div>
@@ -122,6 +136,19 @@
                   <label for="inputNanme4" class="form-label">本文</label>
                   <textarea class="form-control" name="body" style="height: 100px"></textarea>
                 </div>
+                
+                	<div class="col-12">
+                  <label for="inputNanme4" class="form-label">カテゴリー</label>
+                  <div >
+                    <select class="form-select" aria-label="Default select example" name="category">
+                      <option selected="">カテゴリーを選択してください</option>
+                      <option th:value="1">仕事</option>
+                      <option th:value="2">旅行</option>
+                      <option th:value="3">日常</option>
+                    </select>
+                  </div>
+                </div>
+                
                 <div class="col-12">
                   <label for="inputNanme4" class="form-label">写真</label>
                   <input class="form-control" name="file" type="file" id="formFile">

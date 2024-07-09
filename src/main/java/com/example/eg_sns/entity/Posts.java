@@ -42,6 +42,12 @@ public class Posts extends EntityBase {
 	/** 本文 */
 	@Column(name = "body", nullable = false)
 	private String body;
+	
+	/** カテゴリ */
+	@Column(name = "category", nullable = false)
+	private Long category;
+	
+	
 
 	/** 投稿画像情報の紐づけ */
 	@OneToMany(fetch = FetchType.LAZY)
